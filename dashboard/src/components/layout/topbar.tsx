@@ -200,7 +200,7 @@ export function AccountTopBar() {
         )}
         <DropdownMenuItem asChild>
           <a
-            href="mailto:contact@phospho.ai"
+            href="mailto:contact@edubotics.ai"
             className="flex items-center"
             target="_blank"
           >
@@ -232,14 +232,14 @@ export function TopBar() {
       {currentPath === "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
-            phosphobot
+            EduBotics
           </h1>
         </div>
       )}
       {currentPath !== "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
-            {matchedRoute?.title ?? "phosphobot"}
+            {matchedRoute?.title ?? "EduBotics"}
           </h1>
         </div>
       )}
@@ -253,7 +253,7 @@ export function TopBar() {
         <RobotStatusDropdown />
         <Button variant="outline" asChild>
           <a
-            href="https://docs.phospho.ai/welcome"
+            href="https://docs.edubotics.ai/welcome"
             className="flex items-center gap-1 text-sm"
             target="_blank"
             rel="noopener noreferrer"

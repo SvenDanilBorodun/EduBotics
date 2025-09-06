@@ -144,7 +144,7 @@ export function VRControl() {
                   <div className="flex flex-wrap gap-3">
                     <Button asChild variant="outline">
                       <a
-                        href="https://docs.phospho.ai/examples/teleop"
+                        href="https://docs.edubotics.ai/examples/teleop"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -153,7 +153,7 @@ export function VRControl() {
                     </Button>
                     <Button asChild variant="outline">
                       <a
-                        href="https://discord.gg/cbkggY6NSK"
+                        href="https://discord.gg/edubotics"
                         target="_blank"
                         rel="noopener noreferrer"
                       >

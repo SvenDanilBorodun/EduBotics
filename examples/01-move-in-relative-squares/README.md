@@ -1,11 +1,11 @@
-# PhosphoBot: Move in Relative Squares Example
+# EduBotics: Move in Relative Squares Example
 
-This example demonstrates how to use the PhosphoBot API to move a robot in square patterns using relative positioning.
+This example demonstrates how to use the EduBotics API to move a robot in square patterns using relative positioning.
 
 ## Prerequisites
 
 - Python 3.6+
-- A robot running the PhosphoBot server
+- A robot running the EduBotics server
 - Required Python packages (install via `pip install -r requirements.txt`)
 
 ## Configuration
@@ -23,7 +23,7 @@ Modify these values according to your setup.
 
 ## How to Run
 
-1. Make sure your robot is powered on and the PhosphoBot server is running
+1. Make sure your robot is powered on and the EduBotics server is running
 2. Install the required dependencies:
    ```
    pip install -r requirements.txt

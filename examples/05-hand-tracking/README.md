@@ -1,11 +1,11 @@
-# PhosphoBot: Hand Tracking Example
+# EduBotics: Hand Tracking Example
 
 Control your robot using hand movements captured by your camera.
 
 ## Prerequisites
 
 - Python 3.6+
-- A robot running the PhosphoBot server
+- A robot running the EduBotics server
 - Webcam or camera connected to your computer
 - Required Python packages (install via `pip install -r requirements.txt`)
 
@@ -19,7 +19,7 @@ This example uses MediaPipe to track your hand movements through a webcam and co
 
 ## Setup
 
-1. Make sure your robot is powered on and the PhosphoBot server is running
+1. Make sure your robot is powered on and the EduBotics server is running
 2. Ensure your webcam is connected and functioning
 3. Install dependencies:
    ```

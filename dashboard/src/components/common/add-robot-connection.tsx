@@ -48,8 +48,8 @@ interface RobotType {
 
 const ROBOT_TYPES: RobotType[] = [
   {
-    id: "phosphobot",
-    name: "Remote phosphobot server",
+    id: "edubotics",
+    name: "Remote EduBotics server",
     category: "manipulator",
     image: placeholderSvg,
     fields: [
@@ -416,7 +416,7 @@ export function RobotConfigModal({
               This feature is experimental and may not work as expected. Please
               report any issue you encounter{" "}
               <a
-                href="https://discord.gg/cbkggY6NSK"
+                href="https://discord.gg/edubotics"
                 target="_blank"
                 className="underline"
               >

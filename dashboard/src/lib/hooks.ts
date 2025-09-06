@@ -178,7 +178,7 @@ const useGlobalStore = create(
     }),
 
     {
-      name: "phosphobot-global-store",
+      name: "edubotics-global-store",
       storage: createJSONStorage(() => sessionStorage),
     },
   ),

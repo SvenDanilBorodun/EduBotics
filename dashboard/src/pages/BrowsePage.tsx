@@ -554,13 +554,13 @@ export function BrowsePage() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <BreadcrumbLink asChild>
-                      <Link to="/browse">phosphobot</Link>
+                      <Link to="/browse">EduBotics</Link>
                     </BreadcrumbLink>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>
                       Explore your datasets in{" "}
-                      <code>~/phosphobot/recordings</code>
+                      <code>~/edubotics/recordings</code>
                     </p>
                   </TooltipContent>
                 </Tooltip>

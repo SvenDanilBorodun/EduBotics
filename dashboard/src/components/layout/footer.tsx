@@ -84,7 +84,7 @@ export function Footer() {
           variant="ghost"
           size="icon"
           onClick={() => {
-            window.open("https://discord.gg/cbkggY6NSK", "_blank");
+            window.open("https://discord.gg/edubotics", "_blank");
           }}
         >
           <DiscordIcon className="size-4" />
@@ -93,7 +93,7 @@ export function Footer() {
           variant="ghost"
           size="icon"
           onClick={() => {
-            window.open("https://github.com/phospho-app/phosphobot", "_blank");
+            window.open("https://github.com/phospho-app/edubotics", "_blank");
           }}
         >
           <GithubIcon className="size-4" />
@@ -152,17 +152,17 @@ export function Footer() {
             <PopoverContent className="min-w-[30rem] p-4 flex flex-col gap-2 text-muted-foreground">
               Run this command in a terminal to update the software:
               <CodeSnippet
-                title="Update phosphobot"
+                title="Update EduBotics"
                 code={`brew update && brew upgrade phosphobot
 # Check version
-phosphobot --version`}
+edubotics --version`}
                 language="bash"
                 showLineNumbers={false}
               />
               If updating fails, try to reinstall the software.
               <CodeSnippet
-                title="Reinstall phosphobot"
-                code={`brew uninstall phosphobot && brew install phosphobot`}
+                title="Reinstall EduBotics"
+                code={`brew uninstall edubotics && brew install edubotics`}
                 language="bash"
                 showLineNumbers={false}
               />
@@ -182,23 +182,23 @@ phosphobot --version`}
             </PopoverTrigger>
             <PopoverContent className="min-w-[30rem] p-4 flex flex-col gap-2 text-muted-foreground">
               <p>
-                Use this command in a PowerShell terminal to update phosphobot:
+                Use this command in a PowerShell terminal to update EduBotics:
               </p>
               <CodeSnippet
-                title="Update phosphobot"
-                code={`powershell -ExecutionPolicy ByPass -Command "irm https://raw.githubusercontent.com/phospho-app/phosphobot/main/install.ps1 | iex"`}
+                title="Update EduBotics"
+                code={`powershell -ExecutionPolicy ByPass -Command "irm https://raw.githubusercontent.com/phospho-app/edubotics/main/install.ps1 | iex"`}
                 language="powershell"
                 showLineNumbers={false}
               />
               <p>
-                Alternatively, replace your phosphobot.exe file with the latest
+                Alternatively, replace your edubotics.exe file with the latest
                 one
               </p>
               <div className="flex justify-center mt-2">
                 <Button
                   onClick={() =>
                     window.open(
-                      "https://github.com/phospho-app/homebrew-phosphobot/releases/latest",
+                      "https://github.com/phospho-app/homebrew-edubotics/releases/latest",
                       "_blank",
                     )
                   }

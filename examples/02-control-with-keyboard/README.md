@@ -1,11 +1,11 @@
-# PhosphoBot: Keyboard Control Example
+# EduBotics: Keyboard Control Example
 
 This example demonstrates how to control a robot using keyboard inputs.
 
 ## Prerequisites
 
 - Python 3.6+
-- A robot running the PhosphoBot server
+- A robot running the EduBotics server
 - Required Python packages (install via `pip install -r requirements.txt`)
 
 ## Configuration
@@ -20,7 +20,7 @@ SLEEP_TIME: float = 0.05  # Loop sleep time (20 Hz)
 
 ## How to Run
 
-1. Make sure your robot is powered on and the PhosphoBot server is running
+1. Make sure your robot is powered on and the EduBotics server is running
 2. Install the required dependencies:
    ```
    pip install -r requirements.txt

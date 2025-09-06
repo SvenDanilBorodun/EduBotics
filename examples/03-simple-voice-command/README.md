@@ -1,17 +1,17 @@
-# PhosphoBot: Voice Command Example
+# EduBotics: Voice Command Example
 
 Control your robot with simple voice commands.
 
 ## Prerequisites
 
 - Python 3.6+
-- A robot running the PhosphoBot server
+- A robot running the EduBotics server
 - Required Python packages (install via `pip install -r requirements.txt`)
 - Microphone connected to your computer
 
 ## How to Run
 
-1. Ensure your robot is powered on and the PhosphoBot server is running
+1. Ensure your robot is powered on and the EduBotics server is running
 2. Install dependencies:
    ```
    pip install -r requirements.txt

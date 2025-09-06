@@ -1,11 +1,11 @@
-# PhosphoBot: Wave Back Example
+# EduBotics: Wave Back Example
 
 This example demonstrates a robot that waves back when it detects a hand in the camera view.
 
 ## Prerequisites
 
 - Python 3.6+
-- A robot running the PhosphoBot server
+- A robot running the EduBotics server
 - Webcam or camera connected to your computer
 - Required Python packages (install via `pip install -r requirements.txt`)
 
@@ -29,7 +29,7 @@ WAVE_COOLDOWN = 3         # Seconds between wave motions
 
 ## Setup
 
-1. Make sure your robot is powered on and the PhosphoBot server is running
+1. Make sure your robot is powered on and the EduBotics server is running
 2. Ensure your webcam is connected and functioning
 3. Install dependencies:
    ```
