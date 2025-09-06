@@ -54,7 +54,7 @@ export function FeedbackButtons({ aiControlID, onFeedbackSubmitted, className }:
                 size="sm"
                 className={cn(
                     "border-gray-200 hover:bg-gray-100 hover:text-gray-900",
-                    selectedFeedback === "positive" && "bg-green-50 text-green-600 border-green-200 hover:bg-green-100",
+                    selectedFeedback === "positive" && "bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100",
                 )}
                 disabled={isSubmitting}
                 onClick={() => submitFeedback(true)}

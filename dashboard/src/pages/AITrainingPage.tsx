@@ -344,7 +344,7 @@ export function AITrainingPage() {
                       >
                         <Lightbulb
                           className={`size-5 ${
-                            lightbulbOn ? "text-green-500 animate-pulse" : ""
+                            lightbulbOn ? "text-blue-500 animate-pulse" : ""
                           }`}
                         />
                       </Button>
@@ -485,7 +485,7 @@ export function AITrainingPage() {
               {trainingState === "success" && (
                 <>
                   Training started
-                  <CheckCircle2 className="size-4 mr-2 text-green-500" />
+                  <CheckCircle2 className="size-4 mr-2 text-blue-500" />
                 </>
               )}
             </Button>

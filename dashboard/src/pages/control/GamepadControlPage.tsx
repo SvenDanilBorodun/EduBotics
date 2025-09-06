@@ -629,7 +629,7 @@ export function GamepadControl() {
                     </ul>
                   </div>
 
-                  <div className="bg-green-50 dark:bg-green-950 p-3 rounded-lg">
+                  <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-lg">
                     <h4 className="font-medium mb-2">Example Scenarios:</h4>
                     <div className="space-y-2 text-sm">
                       <div>
@@ -687,7 +687,7 @@ export function GamepadControl() {
           <div className="flex flex-col items-center space-y-4">
             <div className="flex items-center gap-2">
               <Gamepad2
-                className={`size-8 ${gamepadConnected ? "text-green-500" : "text-gray-400"}`}
+                className={`size-8 ${gamepadConnected ? "text-blue-500" : "text-gray-400"}`}
               />
               <span className="text-lg font-semibold">
                 {gamepadConnected
@@ -1407,7 +1407,7 @@ export function GamepadControl() {
                         <AccordionTrigger className="hover:no-underline">
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                               <span className="font-medium">
                                 {pair.robot_name} (ID:{" "}
                                 {robotIDFromName(pair.robot_name, serverStatus)}

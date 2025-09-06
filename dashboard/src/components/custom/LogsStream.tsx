@@ -119,7 +119,7 @@ export const LogStream = ({ logFile, isLoading, onClose }: LogStreamProps) => {
 
       <div
         ref={logContainerRef}
-        className="bg-black text-green-400 p-3 rounded font-mono text-sm overflow-y-auto h-64 whitespace-pre-wrap"
+        className="bg-black text-blue-400 p-3 rounded font-mono text-sm overflow-y-auto h-64 whitespace-pre-wrap"
       >
         {isLoading && !logs && (
           <div className="flex items-center justify-center h-full">

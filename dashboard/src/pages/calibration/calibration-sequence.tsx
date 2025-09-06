@@ -253,10 +253,10 @@ export function CalibrationSequence() {
         calibrationStatus === "in_progress") && (
         <Alert
           variant={"default"}
-          className={`mb-6 ${calibrationStatus === "success" ? " border-green-500 border-2" : ""}`}
+          className={`mb-6 ${calibrationStatus === "success" ? " border-blue-500 border-2" : ""}`}
         >
           {calibrationStatus === "success" ? (
-            <CheckCircle className="h-5 w-5 text-green-500" />
+            <CheckCircle className="h-5 w-5 text-blue-500" />
           ) : (
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           )}

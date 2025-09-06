@@ -20,7 +20,7 @@ export default function FinalCTASection() {
         </div>
 
         <Button
-          className="w-full bg-primary-green hover:bg-green-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+          className="w-full bg-primary-blue hover:bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
           onClick={() =>
             window.open(
               "https://billing.phospho.ai/b/5kQbJ2grJcfv4b369Y33W0g",

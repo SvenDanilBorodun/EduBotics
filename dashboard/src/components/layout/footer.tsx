@@ -126,7 +126,7 @@ export function Footer() {
               }
             }}
             size="sm"
-            className="text-xs h-6 px-2 py-0 bg-green-500 hover:bg-green-600"
+            className="text-xs h-6 px-2 py-0 bg-blue-500 hover:bg-blue-600"
             disabled={isUpdating}
           >
             {isUpdating ? (
@@ -144,7 +144,7 @@ export function Footer() {
             <PopoverTrigger>
               <Button
                 size="sm"
-                className="text-xs h-6 px-2 py-0 bg-green-500 hover:bg-green-600"
+                className="text-xs h-6 px-2 py-0 bg-blue-500 hover:bg-blue-600"
               >
                 Update
               </Button>
@@ -175,7 +175,7 @@ phosphobot --version`}
             <PopoverTrigger>
               <Button
                 size="sm"
-                className="text-xs h-6 px-2 py-0 bg-green-500 hover:bg-green-600"
+                className="text-xs h-6 px-2 py-0 bg-blue-500 hover:bg-blue-600"
               >
                 Update
               </Button>

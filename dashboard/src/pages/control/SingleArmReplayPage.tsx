@@ -44,7 +44,7 @@ export function SingleArmReplay() {
         />
         <Label className="text-sm font-medium">Gravity Compensation</Label>
         <span
-          className={`text-sm font-medium ${gravityControl ? "text-green-500" : "text-red-500"}`}
+          className={`text-sm font-medium ${gravityControl ? "text-blue-500" : "text-red-500"}`}
         >
           {gravityControl ? "On" : "Off"}
         </span>

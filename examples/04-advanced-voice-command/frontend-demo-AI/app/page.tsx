@@ -104,7 +104,7 @@ export default function Home() {
       {/* Waveform */}
       <div
         className={`w-full max-w-sm h-16 ${
-          isListening ? 'bg-green-500' : 'bg-slate-700'
+          isListening ? 'bg-blue-500' : 'bg-slate-700'
         } rounded-2xl mb-6 flex items-center justify-center transition-colors`}
       >
         <span className="text-slate-100 italic animate-pulse">

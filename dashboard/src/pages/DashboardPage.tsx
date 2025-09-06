@@ -78,7 +78,7 @@ function RobotStatusAlert({
     return (
       <Alert>
         <AlertTitle className="flex flex-row gap-1 items-center">
-          <span className="size-2 rounded-full bg-green-500" />
+          <span className="size-2 rounded-full bg-blue-500" />
           <Bot className="size-5 mr-1" />
           Status: Connected
         </AlertTitle>
@@ -135,7 +135,7 @@ function AIModelsCard() {
         <CardContent className="flex flex-col md:flex-row py-6">
           <div className="flex-1 md:flex-1/3 mb-4 md:mb-0">
             <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <BrainCircuit className="text-green-500" />
+              <BrainCircuit className="text-blue-500" />
               AI Training and Control
             </div>
             <div className="text-xs text-muted-foreground">
@@ -251,7 +251,7 @@ export function DashboardPage() {
         <CardContent className="w-full flex flex-row gap-4">
           <div className="flex-1/3">
             <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Play className="text-green-500" />
+              <Play className="text-blue-500" />
               Control and Record
             </div>
             <div className="text-xs text-muted-foreground">
@@ -281,7 +281,7 @@ export function DashboardPage() {
                   }}
                 >
                   <div className="flex items-center gap-2">
-                    <Play className="text-green-500" />
+                    <Play className="text-blue-500" />
                     Control
                   </div>
                 </Button>
@@ -313,7 +313,7 @@ export function DashboardPage() {
         <CardContent className="flex justify-between">
           <div className="flex-1/3">
             <div className="flex items-center gap-2 text-xl font-semibold mb-2">
-              <Settings className="text-green-500" />
+              <Settings className="text-blue-500" />
               Advanced Settings
             </div>
             <div className="text-xs text-muted-foreground">

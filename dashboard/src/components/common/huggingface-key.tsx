@@ -121,8 +121,8 @@ export function HuggingFaceKeyInput() {
       </form>
 
       {isSuccess && (
-        <Alert className="mt-2 bg-green-50 text-green-800 border-green-200">
-          <CheckCircle2 className="h-4 w-4 text-green-600" />
+        <Alert className="mt-2 bg-blue-50 text-blue-800 border-blue-200">
+          <CheckCircle2 className="h-4 w-4 text-blue-600" />
           <div className="ml-2">
             <AlertTitle>Success</AlertTitle>
             <AlertDescription>

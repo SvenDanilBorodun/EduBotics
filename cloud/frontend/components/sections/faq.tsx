@@ -80,7 +80,7 @@ const FAQSection = () => {
                   href={linkUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-phospho-green hover:text-phospho-green-dark underline transition-colors"
+                  className="text-phospho-blue hover:text-phospho-blue-dark underline transition-colors"
                 >
                   {linkText}
                 </a>

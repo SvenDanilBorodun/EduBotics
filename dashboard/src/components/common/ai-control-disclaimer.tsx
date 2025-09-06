@@ -3,13 +3,13 @@ import { AlertCircle, Shield } from "lucide-react";
 export function AIControlDisclaimer() {
   return (
     <div className="space-y-4">
-      <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-md">
-        <Shield className="size-5 text-green-600 mt-0.5 flex-shrink-0" />
+      <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-md">
+        <Shield className="size-5 text-blue-600 mt-0.5 flex-shrink-0" />
         <div>
-          <h4 className="font-semibold text-green-800 dark:text-green-300">
+          <h4 className="font-semibold text-blue-800 dark:text-blue-300">
             Safety Precautions Required:
           </h4>
-          <ul className="text-sm text-green-700 dark:text-green-400 mt-1 list-disc pl-5 space-y-1">
+          <ul className="text-sm text-blue-700 dark:text-blue-400 mt-1 list-disc pl-5 space-y-1">
             <li>Clear the area of all obstacles, pets, and people</li>
             <li>Maintain direct visual contact with the robot at all times</li>
             <li>Keep the emergency stop button within immediate reach</li>

@@ -82,10 +82,10 @@ export function ModelStatusFilter({
           className={cn(
             "text-xs flex items-center gap-1.5",
             selectedStatus === "succeeded" &&
-              "text-green-600 dark:text-green-500",
+              "text-blue-600 dark:text-blue-500",
           )}
         >
-          <Check className="h-4 w-4 text-green-600 dark:text-green-500" />
+          <Check className="h-4 w-4 text-blue-600 dark:text-blue-500" />
           <span>Succeeded</span>
         </ToggleGroupItem>
         <ToggleGroupItem
@@ -188,7 +188,7 @@ const ModelRow: React.FC<{ model: SupabaseTrainingModel }> = ({ model }) => {
             <Tooltip>
               <TooltipTrigger>
                 {status === "Succeeded" && (
-                  <Check className="h-4 w-4 inline mr-1 text-green-500" />
+                  <Check className="h-4 w-4 inline mr-1 text-blue-500" />
                 )}
                 {status === "Running" && (
                   <Loader2 className="h-4 w-4 animate-spin inline mr-1" />
@@ -312,7 +312,7 @@ const ModelRow: React.FC<{ model: SupabaseTrainingModel }> = ({ model }) => {
         </TableCell>
         <TableCell className="w-20 text-center">
           {model.used_wandb ? (
-            <Check className="h-4 w-4 inline mr-1 text-green-500" />
+            <Check className="h-4 w-4 inline mr-1 text-blue-500" />
           ) : (
             <X className="h-4 w-4 inline mr-1 text-red-500" />
           )}

@@ -128,8 +128,8 @@ export function AIControlStatus() {
               // Link to AI Control page
               <a href="/inference">
                 <span className="relative inline-block">
-                  <span className="animate-ping absolute inline-flex size-5 rounded-full bg-green-400 opacity-75"></span>
-                  <BrainCircuit className="size-5 text-green" />
+                  <span className="animate-ping absolute inline-flex size-5 rounded-full bg-blue-400 opacity-75"></span>
+                  <BrainCircuit className="size-5 text-blue-500" />
                 </span>
               </a>
             )}
@@ -170,7 +170,7 @@ export function AccountTopBar() {
           <div
             className={`absolute -bottom-2 -right-3 px-1 py-0.5 font-extrabold rounded-sm outline-[0.5px] outline-white font- ${
               proUser
-                ? "bg-black text-green-500 text-[10px]"
+                ? "bg-black text-blue-500-500 text-[10px]"
                 : "bg-gray-200 text-black text-[10px]"
             }`}
           >
@@ -193,7 +193,7 @@ export function AccountTopBar() {
               className="flex items-center"
               target="_blank"
             >
-              <TestTubeDiagonal className="mr-1 size-4 text-green-500" />
+              <TestTubeDiagonal className="mr-1 size-4 text-blue-500-500" />
               Upgrade to Pro
             </a>
           </DropdownMenuItem>
@@ -231,14 +231,14 @@ export function TopBar() {
     <div className="fixed top-0 left-0 right-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-background border-b">
       {currentPath === "/" && (
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-green-500">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
             phosphobot
           </h1>
         </div>
       )}
       {currentPath !== "/" && (
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-green-500">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
             {matchedRoute?.title ?? "phosphobot"}
           </h1>
         </div>

@@ -7,11 +7,11 @@ const PHOSPHO_PRO_SUBSCRIBE_URL = "https://phospho.ai/pro";
 
 export function PhosphoVRCallout({ className }: { className?: string }) {
   return (
-    <Card className={cn("border-green-500 border-2", className)}>
+    <Card className={cn("border-blue-500 border-2", className)}>
       <CardContent className="p-6">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
-            <RectangleGoggles className="text-green-500 size-8" />
+            <RectangleGoggles className="text-blue-500 size-8" />
           </div>
           <div className="flex-1 space-y-4">
             <div>
@@ -27,12 +27,9 @@ export function PhosphoVRCallout({ className }: { className?: string }) {
 
             <div className="grid md:grid-cols-2 gap-4">
               {/* Primary option - Subscription */}
-              <div className="relative p-4 border-2 border-green-500 rounded-lg bg-green-50/50 dark:bg-green-950/20">
-                {/* <div className="absolute -top-2 left-3 bg-green-500 text-white px-2 py-0.5 rounded text-xs font-medium">
-                  RECOMMENDED
-                </div> */}
+              <div className="relative p-4 border-2 border-blue-500 rounded-lg bg-blue-50/50 dark:bg-blue-950/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <TestTubeDiagonal className="size-5 text-green-600" />
+                  <TestTubeDiagonal className="size-5 text-blue-600" />
                   <span className="font-semibold">Unlock with Phospho Pro</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">

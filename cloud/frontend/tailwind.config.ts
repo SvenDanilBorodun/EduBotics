@@ -15,7 +15,7 @@ export default {
         headline: ['var(--font-instrument-serif)', 'serif'],
       },
       colors: {
-        'primary-green': '#71EF52', // You can adjust this hex value to your preferred green
+        'primary-blue': '#007BFF', // You can adjust this hex value to your preferred blue
         'gray-background': '#f5f5f5',
         'dark-gray': '#1a1a1a',
         'medium-gray': '#6b7280',

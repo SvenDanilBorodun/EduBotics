@@ -139,7 +139,7 @@ export function AdminPage() {
           <div className="flex flex-col gap-y-4">
             <HuggingFaceKeyInput />
             {adminSettingsTokens?.huggingface && (
-              <div className="flex items-center gap-2 text-xs text-green-500">
+              <div className="flex items-center gap-2 text-xs text-blue-500">
                 <CircleCheck className="h-4 w-4" /> Token set
               </div>
             )}
@@ -197,7 +197,7 @@ export function AdminPage() {
           </div>
           <WandBKeyInput />
           {adminSettingsTokens?.wandb && (
-            <div className="flex items-center gap-2 text-xs text-green-500">
+            <div className="flex items-center gap-2 text-xs text-blue-500">
               <CircleCheck className="h-4 w-4" /> Token set
             </div>
           )}

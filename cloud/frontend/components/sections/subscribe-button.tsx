@@ -28,7 +28,7 @@ export default function SubscribeButton({
           )}
           <button
             onClick={onClick}
-            className={`bg-primary-green hover:bg-dark-gray text-dark-gray hover:text-primary-green font-semibold py-3 px-12 rounded-lg transition-colors duration-200 ${className}`}
+            className={`bg-primary-blue hover:bg-dark-gray text-dark-gray hover:text-primary-blue font-semibold py-3 px-12 rounded-lg transition-colors duration-200 ${className}`}
             type="submit"
           >
             {children}
@@ -42,7 +42,7 @@ export default function SubscribeButton({
     return (
       <div className="flex justify-center">
         <button
-          className={`bg-primary-green hover:bg-dark-gray text-dark-gray hover:text-primary-green font-semibold py-3 px-12 rounded-lg transition-colors duration-200 ${className}`}
+          className={`bg-primary-blue hover:bg-dark-gray text-dark-gray hover:text-primary-blue font-semibold py-3 px-12 rounded-lg transition-colors duration-200 ${className}`}
           onClick={() => {
             router.push("/auth/login");
           }}

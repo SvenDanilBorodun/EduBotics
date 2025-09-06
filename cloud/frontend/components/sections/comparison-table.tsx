@@ -15,7 +15,7 @@ export default function ComparisonTable() {
               href="https://www.meta.com/en-gb/experiences/phospho-teleoperation/8873978782723478/?srsltid=AfmBOorMv4FFiW1uSPvz9cEgsrwhRa5r0-eQ7P-9RRSLcchwzJkBTzoB"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-phospho-green hover:text-phospho-green-dark underline transition-colors"
+              className="text-phospho-blue hover:text-phospho-blue-dark underline transition-colors"
             >
               phospho teleoperation app
             </a>{" "}
@@ -53,7 +53,7 @@ export default function ComparisonTable() {
   const renderFeatureValue = (value: boolean | string) => {
     if (typeof value === "boolean") {
       return value ? (
-        <Check className="w-5 h-5 text-green-500" />
+        <Check className="w-5 h-5 text-blue-500" />
       ) : (
         <X className="w-5 h-5 text-medium-gray" />
       );
@@ -68,7 +68,7 @@ export default function ComparisonTable() {
         <div className="grid grid-cols-3 items-center bg-white border-b border-light-gray">
           <div className="p-6 invisible">Features</div>
           <div className="p-6 text-center text-dark-gray">Free</div>
-          <div className="p-6 text-center font-bold text-dark-gray bg-green-50">
+          <div className="p-6 text-center font-bold text-dark-gray bg-blue-50">
             phospho pro
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function ComparisonTable() {
             <div className="p-4 text-center flex justify-center items-center min-h-[60px]">
               {renderFeatureValue(feature.free)}
             </div>
-            <div className="p-4 bg-green-50 text-center flex justify-center items-center min-h-[60px] h-full">
+            <div className="p-4 bg-blue-50 text-center flex justify-center items-center min-h-[60px] h-full">
               {renderFeatureValue(feature.pro)}
             </div>
           </div>
