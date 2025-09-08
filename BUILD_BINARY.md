@@ -45,7 +45,7 @@ uv sync --python 3.10
 
 ### 3. 🏗️ Build the Binary
 
-#### Option A: Using the Comprehensive Spec File (Recommended)
+#### Option A: Using the Comprehensive Spec File (Recommended use this)
 
 ```bash
 # Navigate to the phosphobot directory
