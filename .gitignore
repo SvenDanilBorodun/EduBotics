@@ -181,3 +181,8 @@ config.yaml
 node_modules
 .testenv
 bullet3
+
+# Binary executables (too large for git)
+*.exe
+edubotics.exe
+phosphobot/dist/*.exe
