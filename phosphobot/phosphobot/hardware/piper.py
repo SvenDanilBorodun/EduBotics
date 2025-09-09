@@ -9,6 +9,7 @@ from piper_sdk import C_PiperInterface_V2
 
 
 from phosphobot.hardware.base import BaseManipulator
+from phosphobot.models.robot import RobotConfigStatus
 from phosphobot.utils import is_running_on_linux, get_resources_path
 
 
@@ -178,7 +179,7 @@ class PiperHardware(BaseManipulator):
             name=self.name,
             servos_voltage=12.0,
             servos_offsets=[0] * len(self.SERVO_IDS),
-            servos_calibration_position=[0] * len(self.SERVO_IDS),
+            servos_calibration_position=[1e-6] * len(self.SERVO_IDS),
             servos_offsets_signs=[1] * len(self.SERVO_IDS),
         )
 
@@ -202,7 +203,7 @@ class PiperHardware(BaseManipulator):
             servos_voltage=12.0,
             servos_offsets=[0] * len(self.SERVO_IDS),
             servos_offsets_signs=[1] * len(self.SERVO_IDS),
-            servos_calibration_position=[0] * len(self.SERVO_IDS),
+            servos_calibration_position=[1e-6] * len(self.SERVO_IDS),
         )
 
     def enable_torque(self) -> None:
@@ -419,3 +420,14 @@ class PiperHardware(BaseManipulator):
         Check if the robot is powered on.
         """
         return self.is_connected
+
+    def status(self) -> RobotConfigStatus:
+        """
+        Get the status of the robot.
+
+        Returns:
+            RobotConfigStatus object
+        """
+        return RobotConfigStatus(
+            name=self.name, device_name=self.can_name, robot_type="manipulator"
+        )
