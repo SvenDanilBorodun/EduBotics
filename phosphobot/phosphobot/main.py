@@ -1,7 +1,7 @@
 from asyncio import CancelledError
 from loguru import logger
 
-logger.info("Starting phosphobot...")
+logger.info("🎓 EduBotics wird gestartet - Dein Lernbegleiter für Robotik! 🤖")
 
 import sys
 
@@ -29,21 +29,33 @@ from phosphobot import __version__
 _splash_shown = False
 
 
-def print_phospho_splash():
+def print_edubotics_splash():
     global _splash_shown
     if not _splash_shown:
         print(
-            f"""[green]
-    ░█▀█░█░█░█▀█░█▀▀░█▀█░█░█░█▀█░█▀▀█░█▀▀░█▀█░█░█░█▀▄░█░█░░█░░░░▀░▀░▀▀▀░▀▀░░▀▀▀░░▀░
+            f"""[bold bright_blue]
+    ╔══════════════════════════════════════════════════════════════════════════════════╗
+    ║                              🎓 [bright_green]EduBotics[/bright_green] 🤖                              ║
+    ║                        [bright_cyan]Dein Robotik-Lernbegleiter[/bright_cyan]                         ║
+    ╠══════════════════════════════════════════════════════════════════════════════════╣
+    ║                                                                                  ║
+    ║    🔬 [yellow]Experimentieren[/yellow]  │  🔧 [green]Programmieren[/green]  │  🚀 [magenta]Entdecken[/magenta]           ║
+    ║                                                                                  ║
+    ║         [bright_white]"Lernen durch Machen - Robotik für alle!"[/bright_white]                    ║
+    ║                                                                                  ║
+    ║    Version: [bright_yellow]{__version__}[/bright_yellow]                                                        ║
+    ║    Für deutsche Schüler und Studenten entwickelt 🇩🇪                            ║
+    ║                                                                                  ║
+    ╚══════════════════════════════════════════════════════════════════════════════════╝[/bold bright_blue]
 
-    phosphobot {__version__}
-    Copyright (c) 2025 phospho https://phospho.ai
-            [/green]"""
+    [bright_green]✨ Willkommen bei EduBotics! Lass uns gemeinsam die Welt der Robotik erkunden! ✨[/bright_green]
+    [cyan]💡 Tipp: Verwende '--help' für alle verfügbaren Befehle[/cyan]
+            """
         )
         _splash_shown = True
 
 
-print_phospho_splash()
+print_edubotics_splash()
 
 import platform
 import threading
@@ -59,15 +71,15 @@ def fetch_latest_version():
         if version != "unknown" and (version != "v" + __version__):
             if platform.system() == "Darwin":
                 logger.warning(
-                    f"🧪 Version {version} is available. Please update with: \nbrew update && brew upgrade phosphobot"
+                    f"🎓 [bright_green]Neue EduBotics Version {version} verfügbar![/bright_green] \n📦 Update mit: [cyan]brew update && brew upgrade edubotics[/cyan]"
                 )
             elif platform.system() == "Linux":
                 logger.warning(
-                    f"🧪 Version {version} is available. Please update with: \nsudo apt update && sudo apt upgrade phosphobot"
+                    f"🎓 [bright_green]Neue EduBotics Version {version} verfügbar![/bright_green] \n📦 Update mit: [cyan]sudo apt update && sudo apt upgrade edubotics[/cyan]"
                 )
             else:
                 logger.warning(
-                    f"🧪 Version {version} is available. Please update: https://docs.phospho.ai/installation#windows"
+                    f"🎓 [bright_green]Neue EduBotics Version {version} verfügbar![/bright_green] \n📦 Update-Anleitung: [cyan]https://edubotics.de/installation#windows[/cyan]"
                 )
     except Exception:
         pass
@@ -116,7 +128,7 @@ cli = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 
 def version_callback(value: bool):
     if value:
-        print(f"phosphobot {__version__}")
+        print(f"🎓 [bright_green]EduBotics[/bright_green] [bright_yellow]{__version__}[/bright_yellow] 🤖\n[cyan]Dein Robotik-Lernbegleiter für deutsche Studenten![/cyan]")
         raise typer.Exit()
 
 
@@ -127,24 +139,36 @@ def main(
         typer.Option(
             "--version",
             "-v",
-            help="Show the application's version and exit.",
+            help="🎓 Zeige die EduBotics Version und beende das Programm",
             callback=version_callback,
         ),
     ] = False,
 ):
     """
-    phosphobot - A robotics teleoperation server.
+    🎓 [bright_green]EduBotics[/bright_green] - Dein interaktiver Robotik-Lernserver für deutsche Studenten! 🤖
+    
+    [bright_cyan]Lerne Robotik durch praktisches Experimentieren:[/bright_cyan]
+    • 🔬 Steuere Roboter in Echtzeit
+    • 📈 Sammle und analysiere Daten
+    • 📚 Verstehe Robotik-Konzepte
+    • 🎯 Entwickle eigene Anwendungen
     """
     pass
 
 
 @cli.command()
 def info(
-    opencv: Annotated[bool, typer.Option(help="Show OpenCV information.")] = False,
-    servos: Annotated[bool, typer.Option(help="Show servo information.")] = False,
+    opencv: Annotated[bool, typer.Option(help="📷 Zeige OpenCV Informationen für Kamera-Debugging")] = False,
+    servos: Annotated[bool, typer.Option(help="⚙️ Zeige Servo-Motor Informationen für Hardware-Debugging")] = False,
 ):
     """
-    Show all serial ports (/dev/ttyUSB0) and camera information. Useful for debugging.
+    🔍 [bright_yellow]Hardware-Diagnose:[/bright_yellow] Zeige alle seriellen Ports und Kamera-Informationen
+    
+    [bright_cyan]Perfekt für:[/bright_cyan]
+    • 🔌 Hardware-Verbindungen prüfen
+    • 📷 Kamera-Probleme lösen
+    • ⚙️ Servo-Motoren konfigurieren
+    • 🔧 Technische Probleme diagnostizieren
     """
     import serial.tools.list_ports
 
@@ -154,12 +178,12 @@ def info(
 
     print("\n")
     print(
-        f"[green]Available serial ports:[/green] {', '.join([port.device for port in ports])}"
+        f"🔌 [bright_green]Verfügbare serielle Ports:[/bright_green] [cyan]{', '.join([port.device for port in ports]) or 'Keine gefunden'}[/cyan]"
     )
     print(
-        f"[green]Available serial numbers:[/green]  {', '.join([str(sn) for sn in serial_numbers])}"
+        f"🏷️ [bright_green]Seriennummern:[/bright_green] [cyan]{', '.join([str(sn) for sn in serial_numbers]) or 'Keine verfügbar'}[/cyan]"
     )
-    print(f"[green]Available PIDs:[/green]  {' '.join([str(pid) for pid in pid_list])}")
+    print(f"🆔 [bright_green]Hardware PIDs:[/bright_green] [cyan]{' '.join([str(pid) for pid in pid_list]) or 'Keine erkannt'}[/cyan]")
     print("\n")
 
     import cv2
@@ -170,7 +194,7 @@ def info(
     time.sleep(0.5)
     cameras_status = cameras.status().model_dump_json(indent=4)
     cameras.stop()
-    print(f"Cameras status: {cameras_status}")
+    print(f"📷 [bright_green]Kamera-Status:[/bright_green]\n[cyan]{cameras_status}[/cyan]")
 
     if opencv:
         print(cv2.getBuildInformation())
@@ -204,90 +228,114 @@ def is_port_in_use(port: int, host: str) -> bool:
 @cli.command()
 def update():
     """
-    Display information on how to update the software.
+    📦 [bright_green]EduBotics Update-Hilfe:[/bright_green] Zeige wie du auf die neueste Version aktualisierst
+    
+    [bright_cyan]Halte deine Lernumgebung immer aktuell![/bright_cyan]
+    • ✨ Neue Funktionen
+    • 🔧 Verbesserungen
+    • 🛡️ Sicherheitsupdates
     """
     if platform.system() == "Darwin":
         logger.warning(
-            "To update phosphobot, run the following command:\n"
-            "brew update && brew upgrade phosphobot"
+            "🍎 [bright_green]macOS Update:[/bright_green] Führe folgenden Befehl aus:\n"
+            "📦 [cyan]brew update && brew upgrade edubotics[/cyan]"
         )
     elif platform.system() == "Linux":
         logger.warning(
-            "To update phosphobot, run the following command:\n"
-            "sudo apt update && sudo apt upgrade phosphobot"
+            "🐧 [bright_green]Linux Update:[/bright_green] Führe folgenden Befehl aus:\n"
+            "📦 [cyan]sudo apt update && sudo apt upgrade edubotics[/cyan]"
         )
     else:
         logger.warning(
-            "To update phosphobot, please refer to the documentation. https://docs.phospho.ai/installation#windows"
+            "💻 [bright_green]Windows Update:[/bright_green] Besuche die Dokumentation:\n"
+            "🌐 [cyan]https://edubotics.de/installation#windows[/cyan]\n"
+            "💡 [yellow]Tipp: Lade die neueste Version direkt von der Website herunter![/yellow]"
         )
 
 
 @cli.command()
 def run(
-    host: Annotated[str, typer.Option(help="Host to bind to.")] = "0.0.0.0",
-    port: Annotated[int, typer.Option(help="Port to bind to.")] = 80,
+    host: Annotated[str, typer.Option(help="🌐 Server-Host Adresse (Standard: alle Interfaces)")] = "0.0.0.0",
+    port: Annotated[int, typer.Option(help="🔌 Port für den EduBotics Lernserver (Standard: 80)")] = 80,
     simulation: Annotated[
         SimulationMode,
         typer.Option(
-            help="Run the simulation in headless or gui mode.",
+            help="🎮 Simulationsmodus: 'headless' (ohne GUI) oder 'gui' (mit grafischer Oberfläche)",
         ),
     ] = SimulationMode.headless,
     only_simulation: Annotated[
-        bool, typer.Option(help="Only run the simulation.")
+        bool, typer.Option(help="🗺️ Nur Simulation ohne echte Hardware (perfekt zum Lernen!)")
     ] = False,
     simulate_cameras: Annotated[
         bool,
-        typer.Option(help="Simulate a classic camera and a secondary classic camera."),
+        typer.Option(help="📷 Simuliere Kameras für das Lernen ohne echte Hardware"),
     ] = False,
     realsense: Annotated[
         bool,
-        typer.Option(help="Enable the RealSense camera."),
+        typer.Option(help="📹 Aktiviere RealSense 3D-Kamera für Tiefenwahrnehmung"),
     ] = True,
     can: Annotated[
         bool,
         typer.Option(
-            help="Enable the CAN scanning. If False, CAN devices will not detected. Useful in case of conflicts.",
+            help="🚗 Aktiviere CAN-Bus Geräte-Erkennung (deaktivieren bei Konflikten)",
         ),
     ] = True,
     cameras: Annotated[
         bool,
         typer.Option(
-            help="Enable the cameras. If False, no camera will be detected. Useful in case of conflicts.",
+            help="📷 Aktiviere alle Kameras (deaktivieren bei Hardware-Konflikten)",
         ),
     ] = True,
     max_opencv_index: Annotated[
         int,
         typer.Option(
-            help="Maximum OpenCV index to search for cameras. Default is 10.",
+            help="🔢 Maximaler OpenCV Index für Kamera-Suche (Standard: 10)",
         ),
     ] = 10,
     reload: Annotated[
         bool,
         typer.Option(
-            help="(dev) Reload the server on file changes. Do not use when cameras are running."
+            help="🔄 (Entwicklung) Auto-Reload bei Code-Änderungen (nicht mit Kameras verwenden)"
         ),
     ] = False,
     profile: Annotated[
         bool,
         typer.Option(
-            help="(dev) Enable performance profiling. This generates profile.html."
+            help="📈 (Entwicklung) Performance-Profiling aktivieren (erzeugt profile.html)"
         ),
     ] = False,
     crash_telemetry: Annotated[
         bool,
-        typer.Option(help="Disable crash reporting."),
+        typer.Option(help="🛡️ Crash-Reporting zur Verbesserung der Software"),
     ] = True,
     usage_telemetry: Annotated[
         bool,
-        typer.Option(help="Disable usage analytics."),
+        typer.Option(help="📈 Nutzungsanalyse zur Verbesserung der Lernerfahrung"),
     ] = True,
     telemetry: Annotated[
         bool,
-        typer.Option(help="Disable all telemetry (Crash and Usage)."),
+        typer.Option(help="📋 Alle Telemetrie-Funktionen (Crash- und Nutzungsdaten)"),
     ] = True,
 ):
     """
-    🧪 [green]Run the phosphobot dashboard and API server.[/green] Control your robot and record datasets.
+    🎓 [bright_green]Starte den EduBotics Lernserver![/bright_green] Experimentiere mit Robotik und sammle Erfahrungen!
+    
+    [bright_cyan]🚀 Was EduBotics für dich bereithält:[/bright_cyan]
+    • 🕹️ Steuere Roboter per Tastatur, Gamepad oder Leader-Arm
+    • ⚡ Trainiere KI-Modelle (ACT, π0, gr00t-n1.5) mit einem Klick
+    • 🦾 Kompatibel mit SO-100, SO-101, Unitree Go2, Agilex Piper
+    • 🚪 Entwicklerfreundliche API für eigene Projekte
+    • 🤗 Voll kompatibel mit LeRobot und HuggingFace
+    • 📸 Unterstützt alle Kameratypen (klassisch, Tiefe, Stereo)
+    • 🖥️ Läuft auf macOS, Linux und Windows
+    
+    [bright_yellow]🎯 Perfekt für deutsche Studenten:[/bright_yellow]
+    • 📚 Verstehe Robotik durch praktisches Lernen
+    • 🔬 Sammle Datensätze in wenigen Minuten
+    • 🧠 Lerne maschinelles Lernen hands-on
+    • 🛡️ Sichere Lernumgebung mit Simulation
+    
+    [yellow]💡 Tipp: Starte mit --only-simulation zum gefahrlosen Experimentieren![/yellow]
     """
 
     config.SIM_MODE = simulation
@@ -314,12 +362,20 @@ def run(
     success = False
     for current_port in ports:
         if is_port_in_use(current_port, host):
-            logger.warning(f"Port {current_port} is unavailable. Trying next...")
+            logger.warning(f"🚫 [yellow]Port {current_port} ist bereits belegt.[/yellow] 🔄 Versuche nächsten Port...")
             continue
 
         try:
             # Update config with current port
             config.PORT = current_port
+            
+            # Beautiful startup message for students
+            logger.info(
+                f"🚀 [bright_green]EduBotics startet erfolgreich![/bright_green]\n"
+                f"🌐 [cyan]Zugriff über:[/cyan] [bright_blue]http://{get_local_ip()}:{current_port}[/bright_blue]\n"
+                f"📚 [yellow]Lernmodus:[/yellow] [magenta]{'Nur Simulation' if only_simulation else 'Hardware + Simulation'}[/magenta]\n"
+                f"🎓 [green]Viel Spaß beim Lernen mit Robotik![/green]"
+            )
 
             uvicorn.run(
                 "phosphobot.app:app",
@@ -332,15 +388,15 @@ def run(
             break
         except OSError as e:
             if "address already in use" in str(e).lower():
-                logger.warning(f"Port conflict on {current_port}: {e}")
+                logger.warning(f"⚠️ [yellow]Port-Konflikt auf {current_port}:[/yellow] [red]{e}[/red]")
                 continue
-            logger.error(f"Critical server error: {e}")
+            logger.error(f"🔴 [red]Kritischer Server-Fehler:[/red] [bright_red]{e}[/bright_red]")
             raise typer.Exit(code=1)
         except KeyboardInterrupt:
-            logger.debug("Server stopped by user.")
+            logger.debug("👋 [green]EduBotics wurde vom Benutzer gestoppt.[/green] [cyan]Auf Wiedersehen![/cyan]")
             raise typer.Exit(code=0)
         except CancelledError:
-            logger.debug("Server shutdown gracefully.")
+            logger.debug("✅ [green]EduBotics wurde sauber beendet.[/green] [cyan]Bis zum nächsten Mal![/cyan]")
             raise typer.Exit(code=0)
         # Log the full traceback for unexpected errors
         # except Exception as e:
@@ -349,10 +405,12 @@ def run(
 
     if not success:
         logger.warning(
-            "All ports failed. Try a custom port with:\n"
-            "phosphobot run --port 8000\n\n"
-            "Check used ports with:\n"
-            "sudo lsof -i :80 # Replace 80 with your port"
+            "🔴 [red]Alle Ports fehlgeschlagen![/red]\n\n"
+            "💡 [bright_cyan]Lösungsvorschläge:[/bright_cyan]\n"
+            "• Verwende einen anderen Port: [green]edubotics run --port 8000[/green]\n"
+            "• Prüfe belegte Ports: [yellow]sudo lsof -i :80[/yellow]\n"
+            "• Starte im Simulation-Modus: [cyan]edubotics run --only-simulation[/cyan]\n\n"
+            "📞 [yellow]Benötigst du Hilfe? Verwende [green]edubotics --help[/green][/yellow]"
         )
         raise typer.Exit(code=1)
 
