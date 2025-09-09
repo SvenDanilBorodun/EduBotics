@@ -231,14 +231,14 @@ export function TopBar() {
     <div className="fixed top-0 left-0 right-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4 p-4 bg-background border-b">
       {currentPath === "/" && (
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
-            EduBotics
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent drop-shadow-sm">
+            EduBotics 
           </h1>
         </div>
       )}
       {currentPath !== "/" && (
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500-500">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent drop-shadow-sm border-l-4 border-blue-500 pl-4">
             {matchedRoute?.title ?? "EduBotics"}
           </h1>
         </div>

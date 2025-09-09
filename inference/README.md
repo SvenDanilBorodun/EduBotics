@@ -60,7 +60,7 @@ Follow the instruction in the [Physical-Intelligence/openpi](https://github.com/
 We provide clients for ACT servers and Pi0 servers.
 You can implement the `ActionModel` class with you own logic [here](phosphobot/am/models.py).
 
-At this point, go to your phosphobot dashboard > docs and launch the auto/start endpoint that will communicate with the inference server to automatically control the robot.
+At this point, go to your EduBotics Dashboard > docs and launch the auto/start endpoint that will communicate with the inference server to automatically control the robot.
 
 You can stop at any time by calling the auto/stop endpoint.
 

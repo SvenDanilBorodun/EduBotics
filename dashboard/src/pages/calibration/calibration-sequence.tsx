@@ -224,15 +224,11 @@ export function CalibrationSequence() {
       <Alert variant={"default"} className="mb-6">
         <AlertCircle className="h-4 w-4" />
         <AlertTitle>
-          Calibration is only required if you're not a phospho.ai customer.
+          To keep your robot arm precise, calibrate it regularly.
         </AlertTitle>
         <AlertDescription>
           <p>
-            Robots you got from{" "}
-            <a href="https://robots.phospho.ai" className="underline">
-              robots.phospho.ai
-            </a>{" "}
-            are already calibrated.
+            Calibration ensures optimal performance and accuracy of your robot arm movements.
           </p>
         </AlertDescription>
       </Alert>
@@ -327,12 +323,7 @@ export function CalibrationSequence() {
         </div>
       </div>
 
-      <a
-        className="text-xs text-muted-foreground underline cursor-pointer"
-        href="https://www.youtube.com/watch?v=65DW8yLcRmM"
-      >
-        Need help? Watch the video tutorial.
-      </a>
+      {/* Need help? Watch the video tutorial link is hidden */}
     </>
   );
 }

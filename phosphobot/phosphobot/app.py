@@ -80,7 +80,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     try:
         server_ip = get_local_ip()
         logger.success(
-            f"Startup complete. Go to the phosphobot dashboard here: http://{server_ip}:{config.PORT}"
+            f"Startup complete. Go to the EduBotics Dashboard here: http://{server_ip}:{config.PORT}"
         )
         yield
     finally:
