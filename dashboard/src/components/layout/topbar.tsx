@@ -33,6 +33,7 @@ const routeMap = [
   { path: "/", title: "Dashboard" },
   { path: "/control", title: "Robot Control" },
   { path: "/calibration", title: "Calibration" },
+  { path: "/train", title: "AI Training" },
   { path: "/inference", title: "AI Control" },
   { path: "/admin", title: "Admin Configuration" },
   { path: "/docs", title: "API Documentation" },
@@ -232,15 +233,15 @@ export function TopBar() {
       {currentPath === "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent drop-shadow-sm">
-            EduBotics 
+              EduBotics
           </h1>
         </div>
       )}
       {currentPath !== "/" && (
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-blue-500 bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent drop-shadow-sm border-l-4 border-blue-500 pl-4">
-            {matchedRoute?.title ?? "EduBotics"}
-          </h1>
+                {matchedRoute?.title ?? "EduBotics"}
+            </h1>
         </div>
       )}
 
