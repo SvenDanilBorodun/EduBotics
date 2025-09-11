@@ -47,7 +47,7 @@ from phosphobot import __version__
 _splash_shown = False
 
 
-def print_phospho_splash():
+def print_phospho_splash() -> None:
     """
     🎨 Zeigt den bunten EduBotics Willkommensbildschirm
     Wird nur einmal beim Start angezeigt
@@ -91,7 +91,7 @@ from phosphobot.utils import fetch_latest_brew_version
 _version_check_started = False
 
 
-def fetch_latest_version():
+def fetch_latest_version() -> None:
     """
     🔍 Überprüft, ob eine neue Version von EduBotics verfügbar ist
     Läuft im Hintergrund, um den Start nicht zu verlangsamen
@@ -133,8 +133,7 @@ import time
 from typing import Annotated
 
 import typer
-import uvicorn
-from phosphobot.configs import config
+
 from phosphobot.types import SimulationMode
 
 
@@ -174,7 +173,7 @@ cli = typer.Typer(
 )
 
 
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     """📌 Zeigt die Version und beendet das Programm"""
     if value:
         print(f"🤖 EduBotics Version {__version__}")
@@ -192,7 +191,7 @@ def main(
             callback=version_callback,
         ),
     ] = False,
-):
+) -> None:
     """
     🤖 EduBotics - Ein Robotik-Teleoperation-Server für Bildungszwecke
     
@@ -209,7 +208,7 @@ def main(
 def info(
     opencv: Annotated[bool, typer.Option(help="📷 Zeige OpenCV Details")] = False,
     servos: Annotated[bool, typer.Option(help="⚙️ Zeige Servo-Motor Informationen")] = False,
-):
+) -> typer.Exit:
     """
     📋 Zeigt alle verfügbaren Anschlüsse und Kameras
     
@@ -276,7 +275,9 @@ def info(
 
     # Servo-Motor Diagnose (optional)
     if servos:
-        from phosphobot.hardware.motors.feetech import dump_servo_states_to_file
+        from phosphobot.hardware.motors.feetech import (  # type: ignore
+            dump_servo_states_to_file,
+        )
         from phosphobot.utils import get_home_app_path
 
         print("\n" + "═"*80)
@@ -289,7 +290,7 @@ def info(
             if port.pid == 21971:
                 print(f"   [blue]🔍 Untersuche Servo an {port.device}...[/blue]")
                 dump_servo_states_to_file(
-                    get_home_app_path() / f"servo_states_{port.device}.csv",
+                    str(get_home_app_path() / f"servo_states_{port.device}.csv"),
                     port.device,
                 )
                 print(f"   [green]✅ Diagnose gespeichert![/green]")
@@ -315,7 +316,7 @@ def is_port_in_use(port: int, host: str) -> bool:
 # ============================================================================
 
 @cli.command()
-def update():
+def update() -> None:
     """
     📦 Zeigt Informationen zur Software-Aktualisierung
     
@@ -349,6 +350,7 @@ def update():
 
 @cli.command()
 def run(
+    chat: Annotated[bool, typer.Option(help="Run phosphobot in chat mode.")] = False,
     host: Annotated[str, typer.Option(help="🌐 Host-Adresse für den Server")] = "0.0.0.0",
     port: Annotated[int, typer.Option(help="🔌 Port für den Server")] = 80,
     simulation: Annotated[
@@ -380,6 +382,12 @@ def run(
             help="📷 Kameras aktivieren",
         ),
     ] = True,
+    max_can_interfaces: Annotated[
+        int,
+        typer.Option(
+            help="Maximum expected CAN interfaces. Default is 4.",
+        ),
+    ] = 4,
     max_opencv_index: Annotated[
         int,
         typer.Option(
@@ -410,143 +418,72 @@ def run(
         bool,
         typer.Option(help="📡 Alle Telemetrie aktivieren"),
     ] = True,
-):
+) -> None:
     """
     🚀 [green]Startet das EduBotics Dashboard und den API-Server[/green]
     
     Steuere deinen Roboter und nimm Datensätze auf!
     """
-    
-    print("\n" + "═"*80)
-    print("[bold cyan]        🚀 EDUBOTICS SERVER WIRD GESTARTET 🚀[/bold cyan]")
-    print("═"*80)
-    print("\n[yellow]⏳ Bitte warten... Das System wird initialisiert...[/yellow]")
-    print("[dim]💡 Dies kann ein paar Sekunden dauern[/dim]\n")
+    from phosphobot.app import start_server
 
-    # Konfiguration setzen
-    config.SIM_MODE = simulation
-    config.ONLY_SIMULATION = only_simulation
-    config.SIMULATE_CAMERAS = simulate_cameras
-    config.ENABLE_REALSENSE = realsense
-    config.ENABLE_CAMERAS = cameras
-    config.PORT = port
-    config.PROFILE = profile
-    config.CRASH_TELEMETRY = crash_telemetry
-    config.USAGE_TELEMETRY = usage_telemetry
-    config.ENABLE_CAN = can
-    config.MAX_OPENCV_INDEX = max_opencv_index
-
-    if not telemetry:
-        config.CRASH_TELEMETRY = False
-        config.USAGE_TELEMETRY = False
-        print("📡 Telemetrie deaktiviert")
-
-    # Server mit Port-Retry-Logik starten
-    ports = [port]
-    if port == 80:
-        ports += list(range(8020, 8040))  # 8020-8039 als Backup-Ports
-
-    success = False
-    for current_port in ports:
-        if is_port_in_use(current_port, host):
-            logger.warning(f"⚠️ Port {current_port} ist belegt. Versuche nächsten Port...")
-            continue
-
-        try:
-            # Aktualisiere Konfiguration mit aktuellem Port
-            config.PORT = current_port
-            
-            # Schöne Anzeige der Server-URLs für Schüler
-            local_url = f"http://localhost:{current_port}"
-            network_url = f"http://{get_local_ip()}:{current_port}"
-            
-            print("\n" + "[bold blue]╔" + "═"*88 + "╗[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold cyan]🎉 EDUBOTICS SERVER ERFOLGREICH GESTARTET! 🎉[/bold cyan]".center(98) + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            print("[bold blue]╠" + "═"*88 + "╣[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold white]🌐 Dein EduBotics Dashboard ist jetzt verfügbar:[/bold white]".center(98) + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            
-            # Lokaler Zugang mit schöner Box
-            print("[bold blue]║[/bold blue]" + "[bold green]┌─ 📱 FÜR DIESEN COMPUTER ─────────────────────────────────────────────────────────────────┐[/bold green]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + f"[bold green]│[/bold green]   [bold yellow]🔗 {local_url:<60}[/bold yellow] [bold green]│[/bold green]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold green]│[/bold green]   [dim]💡 Klicke auf den Link oder kopiere ihn in deinen Browser[/dim]              [bold green]│[/bold green]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold green]└────────────────────────────────────────────────────────────────────────────────────┘[/bold green]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            
-            # Netzwerk-Zugang mit schöner Box
-            print("[bold blue]║[/bold blue]" + "[bold magenta]┌─ 📡 FÜR ANDERE GERÄTE (Tablets, Handys, andere Computer) ────────────────────┐[/bold magenta]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + f"[bold magenta]│[/bold magenta]   [bold yellow]🔗 {network_url:<60}[/bold yellow] [bold magenta]│[/bold magenta]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold magenta]│[/bold magenta]   [dim]🤝 Teile diese URL mit deinen Mitschülern und Lehrkräften![/dim]             [bold magenta]│[/bold magenta]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold magenta]└────────────────────────────────────────────────────────────────────────────────────┘[/bold magenta]" + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            
-            print("[bold blue]╠" + "═"*88 + "╣[/bold blue]")
-            print("[bold blue]║[/bold blue]" + "[bold yellow]💡 HILFREICHE TIPPS FÜR SCHÜLER:[/bold yellow]".center(98) + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]   [green]🖱️[/green]  Links sind anklickbar - einfach draufklicken!" + " "*42 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]   [green]📱[/green]  Funktioniert perfekt auf Handys und Tablets" + " "*41 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]   [green]👥[/green]  Mehrere Personen können gleichzeitig arbeiten" + " "*40 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]   [green]🔄[/green]  Bei Problemen: Internetverbindung prüfen" + " "*45 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]   [green]🎓[/green]  Bei Fragen: Frage deine Lehrkraft oder Mitschüler" + " "*37 + "[bold blue]║[/bold blue]")
-            print("[bold blue]║[/bold blue]" + " "*88 + "[bold blue]║[/bold blue]")
-            print("[bold blue]╚" + "═"*88 + "╝[/bold blue]")
-            
-            print("\n[bold red]⚠️  ZUM BEENDEN: Drücke STRG+C (Windows/Linux) oder CMD+C (Mac)[/bold red]")
-            print("[dim]🚀 Viel Spaß beim Programmieren und Experimentieren mit EduBotics![/dim]\n")
-
-            uvicorn.run(
-                "phosphobot.app:app",
-                host=host,
-                port=current_port,
-                reload=reload,
-                timeout_graceful_shutdown=1,
-            )
-            success = True
-            break
-        except OSError as e:
-            if "address already in use" in str(e).lower():
-                logger.warning(f"⚠️ Port-Konflikt auf {current_port}: {e}")
-                continue
-            logger.error(f"❌ Kritischer Server-Fehler: {e}")
-            raise typer.Exit(code=1)
-        except KeyboardInterrupt:
-            print("\n" + "═"*60)
-            print("[bold yellow]        👋 EDUBOTICS WIRD BEENDET[/bold yellow]")
-            print("═"*60)
-            print("\n[green]✅ EduBotics wurde erfolgreich gestoppt![/green]")
-            print("[dim]💡 Du kannst es jederzeit wieder mit 'edubotics run' starten[/dim]\n")
-            raise typer.Exit(code=0)
-        except CancelledError:
-            print("\n[green]✅ EduBotics wurde ordnungsgemäß heruntergefahren.[/green]")
-            raise typer.Exit(code=0)
-
-    if not success:
+    if not chat:
         print("\n" + "═"*80)
-        print("        ❌ FEHLER: EDUBOTICS KONNTE NICHT GESTARTET WERDEN")
+        print("[bold cyan]        🚀 EDUBOTICS SERVER WIRD GESTARTET 🚀[/bold cyan]")
         print("═"*80)
+        print("\n[yellow]⏳ Bitte warten... Das System wird initialisiert...[/yellow]")
+        print("[dim]💡 Dies kann ein paar Sekunden dauern[/dim]\n")
         
-        print("\n[bold red]😞 Alle verfügbaren Ports sind belegt![/bold red]")
-        print("\n[bold yellow]💡 LÖSUNGEN FÜR SCHÜLER:[/bold yellow]")
-        
-        print("\n[bold cyan]1. 🔄 Versuche einen anderen Port:[/bold cyan]")
-        print("   [green]edubotics run --port 8000[/green]")
-        print("   [dim]↳ Dadurch wird ein anderer 'Eingang' für das Programm verwendet[/dim]")
-        
-        print("\n[bold cyan]2. 🔍 Prüfe, ob EduBotics bereits läuft:[/bold cyan]")
-        print("   [dim]↳ Schaue im Task-Manager (Windows) nach 'edubotics' oder 'python'[/dim]")
-        print("   [dim]↳ Beende das alte Programm und starte neu[/dim]")
-        
-        print("\n[bold cyan]3. 💻 Starte deinen Computer neu:[/bold cyan]")
-        print("   [dim]↳ Das behebt die meisten Port-Probleme[/dim]")
-        
-        print("\n[bold cyan]4. 🆘 Hole dir Hilfe:[/bold cyan]")
-        print("   [dim]↳ Frage deine Lehrkraft oder einen Mitschüler[/dim]")
-        
-        print("\n" + "═"*80 + "\n")
-        raise typer.Exit(code=1)
+        start_server(
+            host=host,
+            port=port,
+            reload=reload,
+            simulation=simulation,
+            only_simulation=only_simulation,
+            simulate_cameras=simulate_cameras,
+            realsense=realsense,
+            can=can,
+            cameras=cameras,
+            max_opencv_index=max_opencv_index,
+            max_can_interfaces=max_can_interfaces,
+            profile=profile,
+            crash_telemetry=crash_telemetry,
+            usage_telemetry=usage_telemetry,
+            telemetry=telemetry,
+        )
+    else:
+        # Create a new thread with the server
+        import threading
+
+        # Start the server in a separate thread
+        thread = threading.Thread(
+            target=start_server,
+            args=(
+                host,
+                port,
+                reload,
+                simulation,
+                only_simulation,
+                simulate_cameras,
+                realsense,
+                can,
+                cameras,
+                max_opencv_index,
+                max_can_interfaces,
+                profile,
+                crash_telemetry,
+                usage_telemetry,
+                telemetry,
+                True,  # silent mode to avoid logging text
+            ),
+            daemon=True,  # Ensure the thread exits when the main program exits
+        )
+        thread.start()
+
+        # Launch in chat mode
+        from phosphobot.chat.app import AgentApp
+
+        app = AgentApp()
+        app.run()
 
 
 if __name__ == "__main__":

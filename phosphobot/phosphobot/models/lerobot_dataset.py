@@ -1,10 +1,10 @@
 import json
 import os
 import shutil
+import tempfile
 import time
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple, cast
-import tempfile
 
 import numpy as np
 import pandas as pd
@@ -18,6 +18,8 @@ from pydantic import (
     model_validator,
 )
 
+from phosphobot.models.dataset import BaseDataset, BaseEpisode, Step
+from phosphobot.models.robot import BaseRobot
 from phosphobot.types import VideoCodecs
 from phosphobot.utils import (
     NdArrayAsList,
@@ -26,8 +28,6 @@ from phosphobot.utils import (
     get_field_min_max,
     get_home_app_path,
 )
-from phosphobot.models.robot import BaseRobot
-from phosphobot.models.dataset import BaseDataset, BaseEpisode, Step
 
 DEFAULT_FILE_ENCODING = "utf-8"
 
@@ -2449,7 +2449,7 @@ class Stats(BaseModel):
             self.square_sum = self.square_sum + np.sum(image_norm_32**2, axis=(0, 1))
             self.count += nb_pixels
 
-    def compute_from_rolling_images(self):
+    def compute_from_rolling_images(self) -> None:
         """
         Compute the mean and std from the rolling sum and square sum for images.
         """

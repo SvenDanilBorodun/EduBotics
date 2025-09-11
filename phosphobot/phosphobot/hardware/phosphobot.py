@@ -1,11 +1,11 @@
 import asyncio
 from typing import Any, List, Literal, Optional, Tuple
+
 import httpx
 import numpy as np
-
-from phosphobot.hardware.base import BaseRobot
 from loguru import logger
 
+from phosphobot.hardware.base import BaseRobot
 from phosphobot.models import BaseRobotConfig, RobotConfigStatus
 
 
@@ -17,7 +17,9 @@ class RemotePhosphobot(BaseRobot):
     name = "phosphobot"
     _config: Optional[BaseRobotConfig] = None
 
-    def __init__(self, ip: str, port: int, robot_id: int, **kwargs):
+    def __init__(
+        self, ip: str, port: int, robot_id: int, **kwargs: dict[str, Any]
+    ) -> None:
         """
         Initialize connectio to phosphobot.
 

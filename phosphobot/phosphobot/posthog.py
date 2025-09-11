@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import platform
 import uuid
 from functools import wraps
@@ -9,7 +10,6 @@ from posthog import Posthog
 from phosphobot import __version__
 from phosphobot.configs import config
 from phosphobot.utils import get_home_app_path, get_tokens
-
 
 tokens = get_tokens()
 posthog = Posthog(
@@ -47,11 +47,11 @@ def with_failure_tracking(func):
     return wrapper
 
 
-def is_github_actions():
+def is_github_actions() -> bool:
     return os.getenv("GITHUB_ACTIONS") == "true"
 
 
-def get_or_create_unique_id(token_path):
+def get_or_create_unique_id(token_path: Path) -> str:
     """
     Retrieve or generate a unique ID, storing it in a token file. This is an
     anonymous identifier for the user.

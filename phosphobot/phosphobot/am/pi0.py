@@ -1,6 +1,8 @@
-from phosphobot.am.base import ActionModel
 from typing import List
+
 import numpy as np
+
+from phosphobot.am.base import ActionModel
 
 try:
     from openpi_client import websocket_client_policy  # type: ignore
@@ -10,7 +12,7 @@ try:
             self,
             server_url: str = "http://localhost",
             server_port: int = 8080,
-            image_keys=["observation/image", "observation/wrist_image"],
+            image_keys: List[str] = ["observation/image", "observation/wrist_image"],
         ):
             super().__init__(server_url, server_port)
             self.required_input_keys: List[str] = ["images", "state", "prompt"]
