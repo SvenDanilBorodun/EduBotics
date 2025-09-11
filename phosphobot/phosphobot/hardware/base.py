@@ -931,9 +931,7 @@ class BaseManipulator(BaseRobot):
         self,
         target_position: np.ndarray,  # cartesian np.array
         target_orientation_rad: Optional[np.ndarray],  # rad np.array
-        interpolate_trajectory: bool = False,
-        steps: int = 10,
-        **kwargs: Any,
+        **kwargs: Dict[str, Any],
     ) -> None:
         """
         Move the robot to the absolute position and orientation.
@@ -988,10 +986,7 @@ class BaseManipulator(BaseRobot):
         )
 
         self.is_moving = True
-        if not interpolate_trajectory:
-            self.set_motors_positions(goal_q_robot_rad)
-        else:
-            raise NotImplementedError("Interpolation not implemented yet")
+        self.set_motors_positions(goal_q_robot_rad)
         self.is_moving = False
 
         # reset gripping status when going to init position
@@ -1065,11 +1060,7 @@ class BaseManipulator(BaseRobot):
         self.SLEEP_POSITION = None
         self.config = None
 
-    def control_gripper(
-        self,
-        open_command: float,  # Should be between 0 and 1
-        **kwargs: Any,
-    ) -> None:
+    def control_gripper(self, open_command: float, **kwargs: Any) -> None:
         """
         Open or close the gripper until object is gripped.
         open_command: 0 to close, 1 to open
