@@ -1,6 +1,7 @@
 import { PhosphoProCallout } from "@/components/callout/phospho-pro";
 import { AIControlDisclaimer } from "@/components/common/ai-control-disclaimer";
 import { HuggingFaceKeyInput } from "@/components/common/huggingface-key";
+import { QRCodeModal } from "@/components/common/qr-code-modal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,6 +32,7 @@ import {
   LoaderCircle,
   Network,
   Play,
+  QrCode,
   Settings,
   Sliders,
 } from "lucide-react";
@@ -230,6 +232,7 @@ function AIModelsCard() {
 export function DashboardPage() {
   const navigate = useNavigate();
   const { proUser } = useAuth();
+  const [showQRModal, setShowQRModal] = useState(false);
   const { data: serverStatus, isLoading } = useSWR<ServerStatus>(
     ["/status"],
     ([url]) => fetcher(url),
@@ -347,10 +350,21 @@ export function DashboardPage() {
                   Network Management
                 </a>
               </Button>
+
+              <Button 
+                onClick={() => setShowQRModal(true)}
+                variant="outline"
+              >
+                <QrCode className="size-5" />
+                iPad Access QR Code
+              </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* QR Code Modal */}
+      <QRCodeModal open={showQRModal} onOpenChange={setShowQRModal} />
     </div>
   );
 }
