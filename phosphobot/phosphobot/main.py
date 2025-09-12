@@ -1,28 +1,14 @@
-"""
-🤖 EduBotics - Robotik-Steuerungssystem für Bildungszwecke
-Ein benutzerfreundliches System entwickelt für Schüler und Lehrkräfte
-"""
-
-# ============================================================================
-# SCHRITT 1: GRUNDLEGENDE IMPORTS UND SYSTEMKONFIGURATION
-# ============================================================================
-
-from asyncio import CancelledError
 from loguru import logger
 
-logger.info("🚀 Starte EduBotics System...")
+logger.info("Starting phosphobot...")
 
 import sys
 
-print(f"📝 System-Zeichenkodierung: {sys.stdout.encoding}")
+print(f"sys.stdout.encoding = {sys.stdout.encoding}")
 
 import io
 
-# ============================================================================
-# SCHRITT 2: WINDOWS-KOMPATIBILITÄT (Zeichenkodierung)
-# ============================================================================
-
-# 🔧 Behebe Kodierungsprobleme auf Windows-Systemen
+# Fix encoding issues on Windows
 if sys.platform.startswith("win") and sys.stdout.encoding.lower() != "utf-8":
     try:
         sys.stdout = io.TextIOWrapper(
@@ -36,11 +22,6 @@ if sys.platform.startswith("win") and sys.stdout.encoding.lower() != "utf-8":
 
 
 from rich import print
-from rich.console import Console
-from rich.text import Text
-from rich.align import Align
-
-console = Console()
 
 from phosphobot import __version__
 
@@ -50,37 +31,16 @@ _splash_shown = False
 def print_phospho_splash() -> None:
     global _splash_shown
     if not _splash_shown:
-        # Moderne ASCII-Art ohne Boxen
         print(
-            f"""[cyan]
-            
-     [bold magenta]███████╗██████╗ ██╗   ██╗██████╗  ██████╗ ████████╗██╗ ██████╗███████╗[/bold magenta]
-     [bold blue]██╔════╝██╔══██╗██║   ██║██╔══██╗██╔═══██╗╚══██╔══╝██║██╔════╝██╔════╝[/bold blue]
-     [bold cyan]█████╗  ██║  ██║██║   ██║██████╔╝██║   ██║   ██║   ██║██║     ███████╗[/bold cyan]
-     [bold green]██╔══╝  ██║  ██║██║   ██║██╔══██╗██║   ██║   ██║   ██║██║     ╚════██║[/bold green]
-     [bold yellow]███████╗██████╔╝╚██████╔╝██████╔╝╚██████╔╝   ██║   ██║╚██████╗███████║[/bold yellow]
-     [bold red]╚══════╝╚═════╝  ╚═════╝ ╚═════╝  ╚═════╝    ╚═╝   ╚═╝ ╚═════╝╚══════╝[/bold red]
+            f"""[green]
+    ░█▀█░█░█░█▀█░█▀▀░█▀█░█░█░█▀█░█▀▄░█▀█░▀█▀
+    ░█▀▀░█▀█░█░█░▀▀█░█▀▀░█▀█░█░█░█▀▄░█░█░░█░
+    ░▀░░░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀▀▀░▀▀░░▀▀▀░░▀░
 
-                     [bold yellow]🤖 Robotik-Bildungssystem 🎓[/bold yellow]
-                   [bold green]Für deutsche Schulen entwickelt[/bold green]
-                        
-                      [bold white]Version {__version__:^10}[/bold white]
-                   [dim]© 2025 EduBotics Team[/dim]
-                    [dim]Powered by phospho[/dim]
-                         
-            [bold green]✨ Willkommen zur Zukunft der Robotik! ✨[/bold green]
-
-[/cyan]"""
+    phosphobot {__version__}
+    Copyright (c) 2025 phospho https://phospho.ai
+            [/green]"""
         )
-        
-        console.print("\n")
-        console.print("   [bold cyan]🚀 SCHNELLSTART[/bold cyan] - So geht's los:\n")
-        console.print("      [bold white]→[/bold white] Tippe: [bold green on grey15] phosphobot run [/bold green on grey15]  und drücke Enter")
-        console.print("      [bold white]→[/bold white] Öffne: [bold blue underline]http://localhost[/bold blue underline] in deinem Browser")
-        console.print("      [bold white]→[/bold white] [bold yellow]Starte[/bold yellow] die Roboter-Steuerung! 🎮\n")
-        
-        console.print("   [dim]💡 Tipp: Für Hilfe tippe[/dim] [bold white on grey23] phosphobot --help [/bold white on grey23]\n")
-        
         _splash_shown = True
 
 
@@ -98,16 +58,18 @@ def fetch_latest_version() -> None:
     try:
         version = fetch_latest_brew_version(fail_silently=True)
         if version != "unknown" and (version != "v" + __version__):
-            console.print("\n")
             if platform.system() == "Darwin":
-                console.print("   ✨ [bold green]Neue Version verfügbar![/bold green]", version)
-                console.print("   📦 Update mit: [bold]brew update && brew upgrade EduBotics[/bold]")
+                logger.warning(
+                    f"🧪 Version {version} is available. Please update with: \nbrew update && brew upgrade phosphobot"
+                )
             elif platform.system() == "Linux":
-                console.print("   ✨ [bold green]Neue Version verfügbar![/bold green]", version)
-                console.print("   📦 Update mit: [bold]sudo apt update && sudo apt upgrade EduBotics[/bold]")
+                logger.warning(
+                    f"🧪 Version {version} is available. Please update with: \nsudo apt update && sudo apt upgrade phosphobot"
+                )
             else:
-                console.print("   ✨ [bold green]Neue Version verfügbar![/bold green]", version)
-                console.print("   📦 Infos unter: [bold blue]https://docs.edubotics.ai/installation#windows[/bold blue]")
+                logger.warning(
+                    f"🧪 Version {version} is available. Please update: https://docs.phospho.ai/installation#windows"
+                )
     except Exception:
         pass
 
@@ -139,9 +101,8 @@ cli = typer.Typer(no_args_is_help=True, rich_markup_mode="rich")
 
 
 def version_callback(value: bool) -> None:
-    """📌 Zeigt die Version und beendet das Programm"""
     if value:
-        console.print(f"\n   🤖 [bold cyan]EduBotics Version[/bold cyan] [bold yellow]{__version__}[/bold yellow]\n")
+        print(f"phosphobot {__version__}")
         raise typer.Exit()
 
 
@@ -152,44 +113,24 @@ def main(
         typer.Option(
             "--version",
             "-v",
-            help="📌 Zeige die EduBotics Version",
+            help="Show the application's version and exit.",
             callback=version_callback,
         ),
     ] = False,
 ) -> None:
     """
-    🤖 [bold cyan]EduBotics[/bold cyan] - Robotik-Steuerung für Bildungszwecke
-    
-    🎓 Perfekt für Schüler und Lehrkräfte
-    🚀 Einfach zu bedienen - Keine Programmierkenntnisse nötig
-    🎮 Steuere Roboter über das Web-Dashboard
-    📚 Ideal für den MINT-Unterricht
-    
-    [bold yellow]Hauptbefehle:[/bold yellow]
-    
-    • [bold green]phosphobot run[/bold green]     → Dashboard starten (das brauchst du!)
-    • [bold blue]phosphobot info[/bold blue]    → Roboter-Informationen anzeigen
-    • [bold cyan]phosphobot update[/bold cyan]  → System aktualisieren
-    
-    [dim]💡 Tipp: Starte mit 'phosphobot run' und öffne dann deinen Browser![/dim]
+    phosphobot - A robotics teleoperation server.
     """
     pass
 
 
 @cli.command()
 def info(
-    opencv: Annotated[bool, typer.Option(help="📷 Zeige OpenCV Details")] = False,
-    servos: Annotated[bool, typer.Option(help="⚙️ Zeige Servo-Motor Informationen")] = False,
+    opencv: Annotated[bool, typer.Option(help="Show OpenCV information.")] = False,
+    servos: Annotated[bool, typer.Option(help="Show servo information.")] = False,
 ) -> typer.Exit:
     """
-    📊 [green]Zeigt System-Informationen und Hardware-Status[/green]
-    
-    🔍 Überprüfe deine Hardware-Verbindungen
-    📷 Teste Kamera-Funktionalität
-    🔌 Finde verbundene Roboter und Sensoren
-    🛠️ Perfekt zur Fehlerbehebung
-    
-    [dim]💡 Verwende diesen Befehl, wenn dein Roboter nicht erkannt wird![/dim]
+    Show all serial ports (/dev/ttyUSB0) and camera information. Useful for debugging.
     """
     import serial.tools.list_ports
 
@@ -197,71 +138,43 @@ def info(
     pid_list = [port.pid for port in ports]
     serial_numbers = [port.serial_number for port in ports]
 
-    console.print("\n")
-    console.print("   [bold cyan]📊 EDUBOTICS SYSTEM-INFORMATIONEN[/bold cyan]\n")
-    
-    # Roboter-Anschlüsse
-    console.print("   [bold green]🔌 Verfügbare Roboter-Anschlüsse:[/bold green]")
-    if ports:
-        for i, port in enumerate(ports, 1):
-            console.print(f"      {i}. [bold white]{port.device}[/bold white] • {port.description}")
-    else:
-        console.print("      [red]❌ Keine Roboter gefunden[/red]")
-        console.print("      [dim]💡 Stelle sicher, dass dein Roboter angeschlossen ist[/dim]")
-    
-    # Seriennummern
-    if serial_numbers and any(serial_numbers):
-        console.print("\n   [bold green]🏷️ Geräte-Seriennummern:[/bold green]")
-        for i, sn in enumerate(serial_numbers, 1):
-            if sn:
-                console.print(f"      {i}. [bold white]{sn}[/bold white]")
-    
-    # PIDs
-    if pid_list and any(pid_list):
-        console.print("\n   [bold green]🆔 Produkt-IDs:[/bold green]")
-        for i, pid in enumerate(pid_list, 1):
-            if pid:
-                console.print(f"      {i}. [bold white]{pid}[/bold white]")
-    
-    console.print("\n")
+    print("\n")
+    print(
+        f"[green]Available serial ports:[/green] {', '.join([port.device for port in ports])}"
+    )
+    print(
+        f"[green]Available serial numbers:[/green]  {', '.join([str(sn) for sn in serial_numbers])}"
+    )
+    print(f"[green]Available PIDs:[/green]  {' '.join([str(pid) for pid in pid_list])}")
+    print("\n")
 
-    # Kamera-Informationen
     import cv2
+
     from phosphobot.camera import get_all_cameras
 
-    console.print("   [bold blue]📷 KAMERA-STATUS[/bold blue]")
-    console.print("   [yellow]⏳ Kameras werden überprüft...[/yellow]")
-    
     cameras = get_all_cameras()
     time.sleep(0.5)
     cameras_status = cameras.status().model_dump_json(indent=4)
     cameras.stop()
-    
-    console.print("   [green]✅ Kamera erkannt und bereit![/green]")
-    console.print(f"   [dim]{cameras_status}[/dim]")
+    print(f"Cameras status: {cameras_status}")
 
     if opencv:
-        console.print("\n   [bold cyan]📷 OPENCV TECHNISCHE DETAILS[/bold cyan]")
-        console.print("   [dim yellow]⚠️ Für Experten[/dim yellow]\n")
         print(cv2.getBuildInformation())
 
     if servos:
-        from phosphobot.hardware.motors.feetech import dump_servo_states_to_file
+        from phosphobot.hardware.motors.feetech import (  # type: ignore
+            dump_servo_states_to_file,
+        )
         from phosphobot.utils import get_home_app_path
 
-        console.print("\n   [bold cyan]⚙️ SERVO-MOTOR DIAGNOSE[/bold cyan]")
-        console.print("   [yellow]🔍 Analysiere Servo-Motoren...[/yellow]\n")
-        
+        # Diagnose SO-100 servos
         for port in ports:
             if port.pid == 21971:
-                console.print(f"      [blue]🔍 Untersuche Servo an {port.device}...[/blue]")
                 dump_servo_states_to_file(
                     str(get_home_app_path() / f"servo_states_{port.device}.csv"),
                     port.device,
                 )
-                console.print(f"      [green]✅ Diagnose gespeichert![/green]")
 
-    console.print("\n")
     raise typer.Exit()
 
 
@@ -279,73 +192,56 @@ def is_port_in_use(port: int, host: str) -> bool:
 @cli.command()
 def update() -> None:
     """
-    📦 [green]Software-Update Informationen[/green]
-    
-    🔄 Halte EduBotics aktuell
-    🛡️ Erhalte Sicherheitsupdates
-    ✨ Bekomme neue Features
-    🐛 Profitiere von Fehlerbehebungen
-    
-    [dim]💡 Frage deinen Lehrer, bevor du Updates durchführst![/dim]
+    Display information on how to update the software.
     """
-    console.print("\n")
-    console.print("   [bold cyan]📦 EDUBOTICS UPDATE-ANLEITUNG[/bold cyan]\n")
-    
-    console.print("   [bold yellow]🚀 So hältst du EduBotics aktuell:[/bold yellow]\n")
-    console.print("   [bold red]⚠️  WICHTIG: Frage immer deinen Lehrer vorher![/bold red]\n")
-    
     if platform.system() == "Darwin":
-        console.print("   🍎 [bold cyan]macOS Update:[/bold cyan]")
-        console.print("      Führe im Terminal aus:")
-        console.print("      [bold green on grey15] brew update && brew upgrade phosphobot [/bold green on grey15]")
+        logger.warning(
+            "To update phosphobot, run the following command:\n"
+            "brew update && brew upgrade phosphobot"
+        )
     elif platform.system() == "Linux":
-        console.print("   🐧 [bold cyan]Linux Update:[/bold cyan]")
-        console.print("      Führe im Terminal aus:")
-        console.print("      [bold green on grey15] sudo apt update && sudo apt upgrade phosphobot [/bold green on grey15]")
+        logger.warning(
+            "To update phosphobot, run the following command:\n"
+            "sudo apt update && sudo apt upgrade phosphobot"
+        )
     else:
-        console.print("   🪟 [bold cyan]Windows Update:[/bold cyan]")
-        console.print("      Besuche die Dokumentation:")
-        console.print("      [bold blue underline]https://docs.edubotics.ai/installation#windows[/bold blue underline]")
-    
-    console.print("\n   [bold green]🎓 Für Schüler:[/bold green]")
-    console.print("      • Updates nur mit Erlaubnis durchführen")
-    console.print("      • Updates bringen neue Features")
-    console.print("      • Bei Problemen: Lehrer informieren")
-    console.print("\n")
+        logger.warning(
+            "To update phosphobot, please refer to the documentation. https://docs.phospho.ai/installation#windows"
+        )
 
 
 @cli.command()
 def run(
     chat: Annotated[bool, typer.Option(help="Run phosphobot in chat mode.")] = False,
-    host: Annotated[str, typer.Option(help="🌐 Host-Adresse für den Server")] = "0.0.0.0",
-    port: Annotated[int, typer.Option(help="🔌 Port für den Server")] = 80,
+    host: Annotated[str, typer.Option(help="Host to bind to.")] = "0.0.0.0",
+    port: Annotated[int, typer.Option(help="Port to bind to.")] = 80,
     simulation: Annotated[
         SimulationMode,
         typer.Option(
-            help="🎮 Simulationsmodus (headless oder gui)",
+            help="Run the simulation in headless or gui mode.",
         ),
     ] = SimulationMode.headless,
     only_simulation: Annotated[
-        bool, typer.Option(help="🎮 Nur Simulation ausführen (ohne Hardware)")
+        bool, typer.Option(help="Only run the simulation.")
     ] = False,
     simulate_cameras: Annotated[
         bool,
-        typer.Option(help="📷 Simuliere virtuelle Kameras"),
+        typer.Option(help="Simulate a classic camera and a secondary classic camera."),
     ] = False,
     realsense: Annotated[
         bool,
-        typer.Option(help="📹 RealSense-Kamera aktivieren"),
+        typer.Option(help="Enable the RealSense camera."),
     ] = True,
     can: Annotated[
         bool,
         typer.Option(
-            help="🔗 CAN-Bus Scanning aktivieren",
+            help="Enable the CAN scanning. If False, CAN devices will not detected. Useful in case of conflicts.",
         ),
     ] = True,
     cameras: Annotated[
         bool,
         typer.Option(
-            help="📷 Kameras aktivieren",
+            help="Enable the cameras. If False, no camera will be detected. Useful in case of conflicts.",
         ),
     ] = True,
     max_can_interfaces: Annotated[
@@ -357,84 +253,40 @@ def run(
     max_opencv_index: Annotated[
         int,
         typer.Option(
-            help="🔢 Maximaler OpenCV-Index für Kamerasuche",
+            help="Maximum OpenCV index to search for cameras. Default is 10.",
         ),
     ] = 10,
     reload: Annotated[
         bool,
         typer.Option(
-            help="🔄 (Entwickler) Server bei Dateiänderungen neu laden"
+            help="(dev) Reload the server on file changes. Do not use when cameras are running."
         ),
     ] = False,
     profile: Annotated[
         bool,
         typer.Option(
-            help="📊 (Entwickler) Performance-Profiling aktivieren"
+            help="(dev) Enable performance profiling. This generates profile.html."
         ),
     ] = False,
     crash_telemetry: Annotated[
         bool,
-        typer.Option(help="📡 Absturz-Berichte aktivieren"),
+        typer.Option(help="Disable crash reporting."),
     ] = True,
     usage_telemetry: Annotated[
         bool,
-        typer.Option(help="📊 Nutzungsstatistiken aktivieren"),
+        typer.Option(help="Disable usage analytics."),
     ] = True,
     telemetry: Annotated[
         bool,
-        typer.Option(help="📡 Alle Telemetrie aktivieren"),
+        typer.Option(help="Disable all telemetry (Crash and Usage)."),
     ] = True,
 ) -> None:
     """
-    🚀 [green]Startet das EduBotics Dashboard und den API-Server[/green]
-    
-    🎯 Hauptbefehl: Startet dein Robotik-Dashboard
-    📱 Dashboard-URL: http://localhost
-    🌐 Externer Zugriff: http://[deine-ip-adresse]
-    
-    🎮 Steuere deinen Roboter
-    📸 Nimm Datensätze auf
-    📊 Überwache Performance
-    🔧 Konfiguriere Hardware
+    🧪 [green]Run the phosphobot dashboard and API server.[/green] Control your robot and record datasets.
     """
     from phosphobot.app import start_server
 
     if not chat:
-        console.print("\n")
-        
-        # Animierter Start-Header
-        start_text = Text()
-        start_text.append("🚀 ", style="bold")
-        start_text.append("EDUBOTICS ", style="bold cyan")
-        start_text.append("WIRD GESTARTET", style="bold green")
-        console.print(Align.center(start_text))
-        
-        console.print("\n   [yellow]⏳ Bitte warten... System wird initialisiert...[/yellow]")
-        console.print("   [dim]💡 Dies kann ein paar Sekunden dauern[/dim]\n")
-        
-        # Wichtige Informationen in einem übersichtlichen Format
-        dashboard_url = f"http://localhost:{port}" if port != 80 else "http://localhost"
-        
-        console.print("   [bold green]📍 WICHTIGE INFORMATIONEN:[/bold green]\n")
-        
-        # Dashboard-Link hervorgehoben
-        console.print("   🌐 Dashboard öffnen:")
-        console.print(f"      [bold blue on grey15] {dashboard_url} [/bold blue on grey15]\n")
-        
-        if host == "0.0.0.0":
-            console.print("   🔗 Externer Zugriff:")
-            console.print("      Andere können über deine IP-Adresse zugreifen")
-            console.print("      [dim]💡 Frage deinen Lehrer nach der IP[/dim]\n")
-        
-        # Klare Schritte ohne Nummerierung in Boxen
-        console.print("   [bold yellow]🎯 NÄCHSTE SCHRITTE:[/bold yellow]\n")
-        console.print("      [bold white]→[/bold white] Warte auf 'Server läuft'")
-        console.print("      [bold white]→[/bold white] Öffne deinen Browser")
-        console.print(f"      [bold white]→[/bold white] Gehe zu [bold blue]{dashboard_url}[/bold blue]")
-        console.print("      [bold white]→[/bold white] Starte die Roboter-Steuerung! 🎮\n")
-        
-        console.print("   [dim]Drücke Strg+C zum Beenden[/dim]\n")
-        
         start_server(
             host=host,
             port=port,
