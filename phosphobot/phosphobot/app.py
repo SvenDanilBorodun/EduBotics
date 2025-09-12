@@ -73,8 +73,19 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.debug(f"Failed to login to Hugging Face: {e}")
     try:
         server_ip = get_local_ip()
+        from rich import print
+        print("\n" + "=" * 60)
+        print(f"[bold bright_green]🎉 EduBotics Server erfolgreich gestartet! 🎉[/bold bright_green]")
+        print("=" * 60)
+        print(f"[bold bright_cyan]🌐 Dashboard-URL:[/bold bright_cyan] [underline bright_yellow]http://{server_ip}:{config.PORT}[/underline bright_yellow]")
+        print(f"[bold bright_magenta]📱 Lokaler Zugriff:[/bold bright_magenta] [underline bright_yellow]http://localhost:{config.PORT}[/underline bright_yellow]")
+        print("=" * 60)
+        print("[dim bright_blue]💡 Kopiere eine der URLs in deinen Browser, um loszulegen![/dim bright_blue]")
+        print("[dim bright_blue]🔧 Verwende Strg+C zum Beenden des Servers[/dim bright_blue]")
+        print("=" * 60 + "\n")
+        
         logger.success(
-            f"Startup complete. Go to the EduBotics Dashboard here: http://{server_ip}:{config.PORT}"
+            f"EduBotics Dashboard bereit unter: http://{server_ip}:{config.PORT}"
         )
         yield
     finally:
