@@ -1,6 +1,6 @@
 import asyncio
-from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple
-
+from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple, Union
+from textual.worker import Worker, WorkerState
 import httpx
 from loguru import logger
 
@@ -115,6 +115,32 @@ class PhosphobotClient:
         response.raise_for_status()
         return ChatResponse.model_validate(response.json())
 
+    async def log_chat(self, chat_request: ChatRequest) -> None:
+        """
+        Log the chat request to the server.
+        """
+        response = await self.client.post(
+            "/ai-control/chat/log",
+            json=chat_request.model_dump(mode="json"),
+        )
+        response.raise_for_status()
+
+    async def start_recording(self) -> None:
+        """
+        Start recording a dataset with the specified name.
+        """
+        response = await self.client.post(
+            "/recording/start", json={"dataset_name": "chat_dataset"}
+        )
+        response.raise_for_status()
+
+    async def stop_recording(self) -> None:
+        """
+        Stop the current recording session.
+        """
+        response = await self.client.post("/recording/stop", json={"save": True})
+        response.raise_for_status()
+
 
 class RoboticAgent:
     def __init__(
@@ -128,6 +154,8 @@ class RoboticAgent:
         self.task_description = task_description
         self.manual_control = manual_control
         self.manual_command: Optional[str] = None
+        self.chat_history: List[Union[ChatRequest, ChatResponse]] = []
+        self.command_history: List[str] = []
 
     def set_manual_command(self, command: str) -> None:
         """
@@ -160,6 +188,9 @@ class RoboticAgent:
         if chat_response is None:
             logger.warning("No chat response received. Skipping execution.")
             return None
+
+        if chat_response.command is not None:
+            self.command_history.append(chat_response.command)
 
         if chat_response.endpoint == "move_relative":
             if not chat_response.endpoint_params:
@@ -200,6 +231,14 @@ class RoboticAgent:
         await self.phosphobot_client.move_relative(**next_robot_move)
         return next_robot_move
 
+    def add_to_chat_history(
+        self, chat_request: ChatRequest, chat_response: ChatResponse
+    ) -> None:
+        """
+        Add the chat request and response to the chat history.
+        """
+        self.chat_history.extend([chat_request, chat_response])
+
     async def run(self) -> AsyncGenerator[Tuple[str, Dict[str, Any]], None]:
         """
         An async generator that yields events for the UI to handle.
@@ -213,16 +252,15 @@ class RoboticAgent:
         # Manual control setup
         if self.manual_control:
             yield "start_step", {"desc": "Manual control mode enabled."}
-            yield (
-                "step_output",
-                {
-                    "desc": "Manual control active. Use set_manual_command() to control the robot."
-                },
-            )
             yield "step_done", {"success": True}
+
+        # Start recording
+        yield "start_step", {"desc": "🔴 Starting recording."}
+        await self.phosphobot_client.start_recording()
 
         step_count = 0
         max_steps = 50
+        chat_logged = False
 
         while step_count < max_steps:
             current_mode = "manual" if self.manual_control else "AI"
@@ -270,19 +308,32 @@ class RoboticAgent:
                     )
                     continue  # Skip this step if no images
 
+                chat_request = ChatRequest(
+                    prompt=self.task_description,
+                    # Convert dict to list of base64 strings
+                    images=list(images.values()),
+                    command_history=self.command_history,
+                )
+                if not chat_logged:
+                    # Log the initial chat request
+                    await self.phosphobot_client.log_chat(chat_request=chat_request)
+                    chat_logged = True
                 chat_response = await self.phosphobot_client.chat(
-                    chat_request=ChatRequest(
-                        prompt=self.task_description,
-                        # Convert dict to list of base64 strings
-                        images=list(images.values()),
-                    )
+                    chat_request=chat_request
                 )
                 yield (
                     "step_output",
                     {"output": f"AI command: {chat_response.model_dump()}"},
                 )
+                self.add_to_chat_history(
+                    chat_request=chat_request, chat_response=chat_response
+                )
                 # Execute the command
                 await self.execute_command(chat_response=chat_response)
+
+        # Stop recording
+        yield "start_step", {"desc": "🔴 Recording stopped."}
+        await self.phosphobot_client.stop_recording()
 
         yield "step_done", {"success": True}
         control_mode = "manual" if self.manual_control else "AI"

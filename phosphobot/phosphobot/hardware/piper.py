@@ -36,7 +36,7 @@ class PiperHardware(BaseManipulator):
     is_moving = False
     robot_connected = False
 
-    GRIPPER_MAX_ANGLE = 90  # In degree
+    GRIPPER_MAX_ANGLE = 100  # In degree
     ENABLE_GRIPPER = 0x01
     DISABLE_GRIPPER = 0x00
 
@@ -47,6 +47,8 @@ class PiperHardware(BaseManipulator):
     GRIPPER_EFFORT = 300
 
     calibration_max_steps: int = 2
+
+    # Reference: https://github.com/agilexrobotics/piper_sdk/blob/master/asserts/V2/INTERFACE_V2.MD#jointctrl
     #  |joint_name|     limit(rad)     |    limit(angle)    |
     # |----------|     ----------     |     ----------     |
     # |joint1    |   [-2.618, 2.618]  |    [-150.0, 150.0] |
@@ -80,6 +82,8 @@ class PiperHardware(BaseManipulator):
     ) -> None:
         self.can_name = can_name
         super().__init__(only_simulation=only_simulation, axis=axis)
+        self.SERIAL_ID = can_name
+        self.is_torqued = False
 
     @classmethod
     def from_can_port(cls, can_name: str = "can0") -> Optional["PiperHardware"]:
@@ -199,12 +203,15 @@ class PiperHardware(BaseManipulator):
             servos_offsets=[0] * len(self.SERVO_IDS),
             servos_offsets_signs=[1] * len(self.SERVO_IDS),
             servos_calibration_position=[1e-6] * len(self.SERVO_IDS),
+            gripping_threshold=1000,
+            non_gripping_threshold=10,
         )
 
     def enable_torque(self) -> None:
         if not self.is_connected:
             return
         self.motors_bus.EnablePiper()
+        self.is_torqued = True
 
     def disable_torque(self) -> None:
         # Disable torque
@@ -213,6 +220,7 @@ class PiperHardware(BaseManipulator):
         self.motors_bus.DisableArm(7)
         # Disable the gripper with no change of zero position
         self.motors_bus.GripperCtrl(0, self.GRIPPER_EFFORT, self.DISABLE_GRIPPER, 0)
+        self.is_torqued = False
 
     def read_motor_torque(self, servo_id: int) -> Optional[float]:
         """
@@ -224,8 +232,7 @@ class PiperHardware(BaseManipulator):
             gripper_state = self.motors_bus.GetArmGripperMsgs().gripper_state
             return gripper_state.grippers_effort
         else:
-            # Not implemented
-            return 100
+            return 100 if self.is_torqued else 0
 
     def read_motor_voltage(self, servo_id: int) -> Optional[float]:
         """

@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Dict, List, Literal, Optional, Tuple, Union
 
 import numpy as np
@@ -1254,12 +1255,19 @@ class ChatRequest(BaseModel):
     Control the robot with a natural language prompt.
     """
 
+    chat_id: str = Field(
+        default_factory=lambda: str(uuid.uuid4()),
+        description="Unique identifier for the chat session. If not provided, a new UUID will be generated.",
+    )
     prompt: str = Field(
         ...,
         description="The task to be performed by the robot, described in natural language.",
     )
     images: Optional[List[str]] = Field(
         None, description="base64 encoded images to be sent with the request. "
+    )
+    command_history: Optional[List[str]] = Field(
+        None, description="List of previous commands to provide context for the chat."
     )
 
 
@@ -1268,7 +1276,11 @@ class ChatResponse(BaseModel):
     Response to the chat request.
     """
 
-    endpoint: Optional[str] = Field(None, description="The next endpoint to call.")
+    command: Optional[str] = Field(
+        ...,
+        description="The command to be executed by the robot, generated from the prompt.",
+    )
+    endpoint: Optional[str] = Field(None, description="The endpoint to call.")
     endpoint_params: Optional[Dict[str, Any]] = Field(
-        None, description="Parameters to pass to the next endpoint."
+        None, description="Parameters to pass to the endpoint."
     )
