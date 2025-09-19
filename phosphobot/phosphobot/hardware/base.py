@@ -66,6 +66,7 @@ class BaseManipulator(BaseRobot):
 
     CALIBRATION_POSITION: List[float]  # same size as SERVO_IDS
     SLEEP_POSITION: Optional[List[float]] = None
+    time_to_sleep: float = 0.7 # seconds to wait after moving to sleep position
     RESOLUTION: int
     # The effector is the gripper
     END_EFFECTOR_LINK_INDEX: int
@@ -235,7 +236,7 @@ class BaseManipulator(BaseRobot):
             axis_orientation=self.AXIS_ORIENTATION,
             use_fixed_base=True,
         )
-
+        self.num_joints = num_joints
         self.actuated_joints = actuated_joints
 
         # Infer SERVO_IDS and CALIBRATION_POSITION from the actuated joints if not set
@@ -245,12 +246,12 @@ class BaseManipulator(BaseRobot):
                 f"{self.__class__.__name__}.SERVO_IDS not set, using default: {self.SERVO_IDS}"
             )
         if not hasattr(self, "CALIBRATION_POSITION"):
-            self.CALIBRATION_POSITION = [0] * len(self.SERVO_IDS)
+            self.CALIBRATION_POSITION = [0.0] * len(self.SERVO_IDS)
             logger.warning(
                 f"{self.__class__.__name__}.CALIBRATION_POSITION not set, using default: {self.CALIBRATION_POSITION}"
             )
         if not hasattr(self, "SLEEP_POSITION"):
-            self.SLEEP_POSITION = [0] * len(self.SERVO_IDS)
+            self.SLEEP_POSITION = [0.0] * len(self.SERVO_IDS)
             logger.warning(
                 f"{self.__class__.__name__}.SLEEP_POSITION not set, using default: {self.SLEEP_POSITION}"
             )
@@ -386,7 +387,7 @@ class BaseManipulator(BaseRobot):
             logger.warning("None torque value for gripper motor ")
             current_gripper_torque = np.int32(0)
 
-        return current_gripper_torque
+        return np.int32(current_gripper_torque)
 
     async def move_to_initial_position(self, open_gripper: bool = False) -> None:
         """
@@ -417,7 +418,7 @@ class BaseManipulator(BaseRobot):
                     )
                 except Exception:
                     pass
-            await asyncio.sleep(0.7)
+            await asyncio.sleep(self.time_to_sleep)
             self.disable_torque()
             await asyncio.sleep(0.1)
 
@@ -585,7 +586,7 @@ class BaseManipulator(BaseRobot):
 
     def forward_kinematics(
         self, sync_robot_pos: bool = False
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
         Compute the forward kinematics of the robot
         Returns cartesian position and orientation in radians
@@ -1083,6 +1084,14 @@ class BaseManipulator(BaseRobot):
             self.write_gripper_command(open_command_clipped)
         self.closing_gripper_value = open_command_clipped
 
+        # Update simulation only if the object has not been gripped:
+        self.move_gripper_in_sim(open=open_command_clipped)
+    
+
+    def move_gripper_in_sim(self, open: float) -> None:
+        """
+        Move the gripper in the simulation.
+        """
         ## Simulation side
         # Since last motor ID might not be equal to the number of motors ( due to some shadowed motors)
         # We extract last motor calibration data for the gripper:
@@ -1095,16 +1104,15 @@ class BaseManipulator(BaseRobot):
         else:
             open_position = self.upper_joint_limits[-1]
 
-        # Update simulation only if the object has not been gripped:
         if not self.is_object_gripped:
             self.sim.set_joints_states(
-                robot_id=self.p_robot_id,
-                joint_indices=[self.GRIPPER_JOINT_INDEX],
-                target_positions=[
-                    close_position
-                    + (open_position - close_position) * open_command_clipped
-                ],
-            )
+                    robot_id=self.p_robot_id,
+                    joint_indices=[self.GRIPPER_JOINT_INDEX],
+                    target_positions=[
+                        close_position
+                        + (open_position - close_position) * open
+                    ],
+                )
 
     def get_observation(
         self,
@@ -1137,6 +1145,7 @@ class BaseManipulator(BaseRobot):
             )
         else:
             # Skip forward kinematics and return nan values
+            # This is size 7 for [x, y, z, rx, ry, rz, gripper]
             state = np.full(7, np.nan)
 
         return state, joints_position

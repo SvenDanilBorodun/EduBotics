@@ -181,6 +181,7 @@ config.yaml
 node_modules
 .testenv
 bullet3
+.vscode
 
 # Binary executables (too large for git)
 *.exe
