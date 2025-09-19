@@ -40,7 +40,6 @@ dependencies = [
     "pyrealsense2>=2.54; platform_system == 'Linux'",
     "pyrealsense2>=2.54; platform_system == 'Windows'",
     "pyrealsense2-macosx>=2.54; platform_system == 'Darwin'",
->>>>>>> upstream/main
     "fastparquet>=2024.11.0",
     "httpx[socks]>=0.28.1",
     "go2-webrtc-connect>=0.2.1",
@@ -53,8 +52,6 @@ dependencies = [
     "google-genai>=1.34.0",
     "qrcode[pil]>=8.0.0",
     "chafa-py>=1.2.0",
-=======
->>>>>>> upstream/main
 ]
 
 [dependency-groups]
