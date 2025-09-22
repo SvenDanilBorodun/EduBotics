@@ -87,10 +87,9 @@ if not _version_check_started:
     _version_check_started = True
 
 import socket
-import time
 import threading
+import time
 from typing import Annotated
-
 
 import typer
 
