@@ -20,6 +20,8 @@ from typing import (
     Union,
 )
 
+from phosphobot.models.lerobot_dataset import InfoModel
+
 if TYPE_CHECKING:
     # We only need BaseManipulator for type checking
     # This prevents loading pybullet in modal
@@ -794,25 +796,24 @@ class Gr00tN1(ActionModel):
 
             # Number of cameras
             if len(image_inputs) != len(config.embodiment.modalities.video.keys()):
-                logger.warning(
-                    f"Model has {len(config.embodiment.modalities.video.keys())} cameras but {len(image_inputs)} cameras are plugged."
-                )
+                error_message = f"Model has {len(config.embodiment.modalities.video.keys())} cameras but {len(image_inputs)} cameras are plugged."
+                logger.warning(error_message)
                 control_signal.stop()
-                raise Exception(
-                    f"Model has {len(config.embodiment.modalities.video.keys())} cameras but {len(image_inputs)} cameras are plugged."
-                )
+                raise Exception(error_message)
 
-            # Number of robots
-            number_of_connected_joints = sum(
-                robot.read_joints_position().shape[0] for robot in robots
-            )
-            number_of_joints_in_config = len(
-                config.embodiment.statistics.action.action_space.values()
-            )
-            if number_of_connected_joints != number_of_joints_in_config:
-                logger.warning("No robot connected. Exiting AI control loop.")
-                control_signal.stop()
-                raise Exception("No robot connected. Exiting AI control loop.")
+            # TODO: Number of joints check
+            # The current check is not correct. Bit tricky because action space can be subtle.
+            # number_of_connected_joints = sum(
+            #     robot.read_joints_position().shape[0] for robot in robots
+            # )
+            # number_of_joints_in_config = len(
+            #     config.embodiment.statistics.action.action_space.values()
+            # )
+            # if number_of_connected_joints != number_of_joints_in_config:
+            #     error_message = f"Model has {number_of_joints_in_config} joints but {number_of_connected_joints} joints are connected through {len(robots)} robots."
+            #     logger.warning(error_message)
+            #     control_signal.stop()
+            #     raise Exception(error_message)
 
             # Concatenate all robot states
             state = robots[0].read_joints_position(
@@ -1138,6 +1139,7 @@ class Gr00tTrainer(BaseTrainer):
         # Download huggingface dataset with huggingface_hub
         logger.info(f"Downloading dataset {self.config.dataset_name} to {data_dir}")
         max_retries = 3
+        DATASET_PATH: Optional[Path] = None
         for attempt in range(max_retries):
             try:
                 dataset_path_as_str = snapshot_download(
@@ -1160,6 +1162,18 @@ class Gr00tTrainer(BaseTrainer):
                     raise RuntimeError(
                         f"Failed to download dataset {self.config.dataset_name} after {max_retries} attempts, is Hugging Face down ? : {e}"
                     )
+
+        if DATASET_PATH is None:
+            raise RuntimeError(
+                f"Failed to download dataset {self.config.dataset_name} after {max_retries} attempts."
+            )
+
+        # Check if the dataset is version 2.1 (this pipeline doesn't support v3.0)
+        info_model = InfoModel.from_json(meta_folder_path=str(DATASET_PATH / "meta"))
+        if info_model.codebase_version != "v2.1":
+            raise ValueError(
+                f"Dataset {self.config.dataset_name} is version {info_model.codebase_version}, but expected v2.1."
+            )
 
         # Check the dataset for null/nan values in action/observation columns
         check_parquet_files(DATASET_PATH / "data" / "chunk-000")
