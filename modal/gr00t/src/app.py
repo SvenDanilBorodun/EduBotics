@@ -39,7 +39,7 @@ gr00t_image = (
         pyproject_toml=str(phosphobot_dir / "pyproject.toml"),
     )
     .run_commands(
-        "git clone https://github.com/phospho-app/Isaac-GR00T.git /workspace/gr00t && cd /workspace/gr00t && git checkout 800299dec1775147d347f2c3d60130cf031c0a6b",
+        "git clone https://github.com/phospho-app/Isaac-GR00T.git /workspace/gr00t && cd /workspace/gr00t && git checkout 2beed498ae6c76f84a5ac0c342dbffa8dbab1e74",
     )
     .run_commands("uv pip install -e /workspace/gr00t --system")
     .uv_pip_install(
@@ -180,6 +180,8 @@ def serve(
         from gr00t.model.policy import Gr00tPolicy  # type: ignore
         from phosphobot.am.gr00t import RobotInferenceServer
 
+        # Handle the code logic here so we don't have to juggle betwwen Gr00t files and phosphobot files
+
         # Check if this path exists in the container
         start_time = time.time()
         try:
@@ -188,6 +190,9 @@ def serve(
                 repo_type="model",
                 revision=str(checkpoint) if checkpoint is not None else None,
                 cache_dir="/data/hf_cache",
+            )
+            logger.info(
+                f"Snapshot downloaded to {local_model_path} after {time.time() - start_time} seconds"
             )
         except RepositoryNotFoundError as e:
             logger.error(f"Failed to download model {model_id}: {e}")

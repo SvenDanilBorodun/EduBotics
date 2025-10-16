@@ -1,6 +1,6 @@
 [project]
 name = "phosphobot"
-version = "0.3.132"
+version = "0.3.133"
 description = "The AI-ready robotics dev kit, with built-in remote control and VLA support."
 authors = [{ name = "phospho", email = "contact@phospho.ai" }]
 license = "MIT"
@@ -15,6 +15,7 @@ dependencies = [
     "numpy>=1.26.4",
     "pybullet>=3.2.7",
     "pydantic>=2.10.2",
+    "pydantic_core==2.41.1", # To fix ci/cd for now
     "scipy>=1.13.0",
     "uvicorn>=0.32.1",
     "opencv-python-headless>=4.0",
